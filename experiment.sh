@@ -24,7 +24,6 @@ if [[ ${#MODEL_PATHS[@]} -eq 0 ]]; then
   exit 1
 fi
 
-python3 preprocess.py
 
 # 1. 모델별 임베딩 생성 및 FAISS 인덱스 구축
 # 현재 스크립트 이름은 index.py가 아니라 indexing.py 입니다.
