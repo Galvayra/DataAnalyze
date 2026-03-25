@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>1. 시간대별 이벤트와 구매 흐름</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --blue: #4f46e5;
+      --green: #059669;
+      --orange: #ea580c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 32px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .hero, .insight-card, .chart-card, .table-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+    }
+    .hero {
+      margin-bottom: 20px;
+    }
+    .insight-card {
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+    .insight-card h2 {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .kpi {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .kpi .label {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+    .kpi .value {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .chart-grid {
+      display: grid;
+      gap: 20px;
+    }
+    .chart-card h2, .table-card h2 {
+      margin: 0 0 6px;
+      font-size: 20px;
+    }
+    .chart-subtitle {
+      margin: 0 0 16px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    svg {
+      width: 100%;
+      height: auto;
+      overflow: visible;
+    }
+    .guide {
+      stroke: #e5e7eb;
+      stroke-width: 1;
+      stroke-dasharray: 4 4;
+    }
+    .axis {
+      stroke: #9ca3af;
+      stroke-width: 1.2;
+    }
+    .axis-label {
+      fill: #6b7280;
+      font-size: 11px;
+    }
+    .bar-value {
+      fill: #374151;
+      font-size: 9px;
+    }
+    .insight-list {
+      margin: 16px 0 0;
+      padding-left: 20px;
+      line-height: 1.7;
+    }
+    @media (max-width: 900px) {
+      body { padding: 16px; }
+      .kpis { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <h1>1. 시간대별 이벤트와 구매 흐름</h1>
+      <p>
+        시간대별 주문 추이와 구매전환율을 정의하고 구매 가능성이 높은 시간대를 파악하기 위한 분석입니다.
+      </p>
+      
+      <div class="kpis">
+        <div class="kpi">
+          <div class="label">시간대별 매출 1위</div>
+          <div class="value">00시 (1,479,210)</div>
+        </div>
+        <div class="kpi">
+          <div class="label">시간대별 구매 전환수 1위</div>
+          <div class="value">21시 (61건)</div>
+        </div>
+        <div class="kpi">
+          <div class="label">시간대별 구매 전환율 1위</div>
+          <div class="value">10시 (7.06%)</div>
+        </div>
+      </div>
+    
+    </section>
+    <section class="insight-card">
+      
+    <h2>해석 포인트</h2>
+    <ul class="insight-list">
+      <li>첫 번째 차트는 `user_event_logs` 전체 행 수를 시간대별로 단순 집계한 결과입니다.</li>
+      <li>두 번째 차트는 `order_info` 전체 행 수를 시간대별로 단순 집계한 결과입니다.</li>
+      <li>구매전환 수와 구매전환율은 주문 1건당 가장 가까운 직전 `enter_browser` 1건만 연결한 총 705건 기준으로 집계했습니다.</li>
+      <li>구매전환 시간대는 `enter_browser` 발생 시각을 기준으로 집계하며, 예를 들어 `01:20 이벤트 -> 02:17 구매`는 `01시 전환`으로 계산합니다.</li>
+      <li>구매전환율의 분모는 전체 `enter_browser` 로그가 아니라, `event_goods_id`와 `event_shop_id`가 모두 존재하는 상품 조회형 `enter_browser` 이벤트 수입니다.</li>
+    </ul>
+    
+    </section>
+
+    <div class="chart-grid">
+      
+    <section class="chart-card">
+      <h2>시간대별 전체 이벤트 수</h2>
+      <p class="chart-subtitle">유저가 행동한 횟수를 시간대별로 단순 집계한 결과입니다.</p>
+      <svg viewBox="0 0 860 280" role="img" aria-label="시간대별 전체 이벤트 수">
+        <line x1='48' y1='238.00' x2='844' y2='238.00' class='guide' /><text x='40' y='242.00' text-anchor='end' class='axis-label'>0</text><line x1='48' y1='187.50' x2='844' y2='187.50' class='guide' /><text x='40' y='191.50' text-anchor='end' class='axis-label'>2,419</text><line x1='48' y1='137.00' x2='844' y2='137.00' class='guide' /><text x='40' y='141.00' text-anchor='end' class='axis-label'>4,838</text><line x1='48' y1='86.50' x2='844' y2='86.50' class='guide' /><text x='40' y='90.50' text-anchor='end' class='axis-label'>7,258</text><line x1='48' y1='36.00' x2='844' y2='36.00' class='guide' /><text x='40' y='40.00' text-anchor='end' class='axis-label'>9,677</text>
+        <line x1="48" y1="238" x2="844" y2="238" class="axis" />
+        <rect x='52.00' y='69.02' width='25.17' height='168.98' rx='4' fill='#4f46e5' /><text x='64.58' y='63.02' text-anchor='middle' class='bar-value'>8,095</text><rect x='85.17' y='118.66' width='25.17' height='119.34' rx='4' fill='#4f46e5' /><text x='97.75' y='112.66' text-anchor='middle' class='bar-value'>5,717</text><rect x='118.33' y='158.82' width='25.17' height='79.18' rx='4' fill='#4f46e5' /><text x='130.92' y='152.82' text-anchor='middle' class='bar-value'>3,793</text><rect x='151.50' y='196.59' width='25.17' height='41.41' rx='4' fill='#4f46e5' /><text x='164.08' y='190.59' text-anchor='middle' class='bar-value'>1,984</text><rect x='184.67' y='213.43' width='25.17' height='24.57' rx='4' fill='#4f46e5' /><text x='197.25' y='207.43' text-anchor='middle' class='bar-value'>1,177</text><rect x='217.83' y='218.21' width='25.17' height='19.79' rx='4' fill='#4f46e5' /><text x='230.42' y='212.21' text-anchor='middle' class='bar-value'>948</text><rect x='251.00' y='216.98' width='25.17' height='21.02' rx='4' fill='#4f46e5' /><text x='263.58' y='210.98' text-anchor='middle' class='bar-value'>1,007</text><rect x='284.17' y='206.56' width='25.17' height='31.44' rx='4' fill='#4f46e5' /><text x='296.75' y='200.56' text-anchor='middle' class='bar-value'>1,506</text><rect x='317.33' y='195.37' width='25.17' height='42.63' rx='4' fill='#4f46e5' /><text x='329.92' y='189.37' text-anchor='middle' class='bar-value'>2,042</text><rect x='350.50' y='188.97' width='25.17' height='49.03' rx='4' fill='#4f46e5' /><text x='363.08' y='182.97' text-anchor='middle' class='bar-value'>2,349</text><rect x='383.67' y='173.75' width='25.17' height='64.25' rx='4' fill='#4f46e5' /><text x='396.25' y='167.75' text-anchor='middle' class='bar-value'>3,078</text><rect x='416.83' y='161.29' width='25.17' height='76.71' rx='4' fill='#4f46e5' /><text x='429.42' y='155.29' text-anchor='middle' class='bar-value'>3,675</text><rect x='450.00' y='157.30' width='25.17' height='80.70' rx='4' fill='#4f46e5' /><text x='462.58' y='151.30' text-anchor='middle' class='bar-value'>3,866</text><rect x='483.17' y='147.01' width='25.17' height='90.99' rx='4' fill='#4f46e5' /><text x='495.75' y='141.01' text-anchor='middle' class='bar-value'>4,359</text><rect x='516.33' y='150.45' width='25.17' height='87.55' rx='4' fill='#4f46e5' /><text x='528.92' y='144.45' text-anchor='middle' class='bar-value'>4,194</text><rect x='549.50' y='144.59' width='25.17' height='93.41' rx='4' fill='#4f46e5' /><text x='562.08' y='138.59' text-anchor='middle' class='bar-value'>4,475</text><rect x='582.67' y='143.75' width='25.17' height='94.25' rx='4' fill='#4f46e5' /><text x='595.25' y='137.75' text-anchor='middle' class='bar-value'>4,515</text><rect x='615.83' y='140.58' width='25.17' height='97.42' rx='4' fill='#4f46e5' /><text x='628.42' y='134.58' text-anchor='middle' class='bar-value'>4,667</text><rect x='649.00' y='136.57' width='25.17' height='101.43' rx='4' fill='#4f46e5' /><text x='661.58' y='130.57' text-anchor='middle' class='bar-value'>4,859</text><rect x='682.17' y='120.48' width='25.17' height='117.52' rx='4' fill='#4f46e5' /><text x='694.75' y='114.48' text-anchor='middle' class='bar-value'>5,630</text><rect x='715.33' y='99.12' width='25.17' height='138.88' rx='4' fill='#4f46e5' /><text x='727.92' y='93.12' text-anchor='middle' class='bar-value'>6,653</text><rect x='748.50' y='69.13' width='25.17' height='168.87' rx='4' fill='#4f46e5' /><text x='761.08' y='63.13' text-anchor='middle' class='bar-value'>8,090</text><rect x='781.67' y='36.00' width='25.17' height='202.00' rx='4' fill='#4f46e5' /><text x='794.25' y='30.00' text-anchor='middle' class='bar-value'>9,677</text><rect x='814.83' y='40.55' width='25.17' height='197.45' rx='4' fill='#4f46e5' /><text x='827.42' y='34.55' text-anchor='middle' class='bar-value'>9,459</text>
+        <text x='64.58' y='266' text-anchor='middle' class='axis-label'>00</text><text x='97.75' y='266' text-anchor='middle' class='axis-label'>01</text><text x='130.92' y='266' text-anchor='middle' class='axis-label'>02</text><text x='164.08' y='266' text-anchor='middle' class='axis-label'>03</text><text x='197.25' y='266' text-anchor='middle' class='axis-label'>04</text><text x='230.42' y='266' text-anchor='middle' class='axis-label'>05</text><text x='263.58' y='266' text-anchor='middle' class='axis-label'>06</text><text x='296.75' y='266' text-anchor='middle' class='axis-label'>07</text><text x='329.92' y='266' text-anchor='middle' class='axis-label'>08</text><text x='363.08' y='266' text-anchor='middle' class='axis-label'>09</text><text x='396.25' y='266' text-anchor='middle' class='axis-label'>10</text><text x='429.42' y='266' text-anchor='middle' class='axis-label'>11</text><text x='462.58' y='266' text-anchor='middle' class='axis-label'>12</text><text x='495.75' y='266' text-anchor='middle' class='axis-label'>13</text><text x='528.92' y='266' text-anchor='middle' class='axis-label'>14</text><text x='562.08' y='266' text-anchor='middle' class='axis-label'>15</text><text x='595.25' y='266' text-anchor='middle' class='axis-label'>16</text><text x='628.42' y='266' text-anchor='middle' class='axis-label'>17</text><text x='661.58' y='266' text-anchor='middle' class='axis-label'>18</text><text x='694.75' y='266' text-anchor='middle' class='axis-label'>19</text><text x='727.92' y='266' text-anchor='middle' class='axis-label'>20</text><text x='761.08' y='266' text-anchor='middle' class='axis-label'>21</text><text x='794.25' y='266' text-anchor='middle' class='axis-label'>22</text><text x='827.42' y='266' text-anchor='middle' class='axis-label'>23</text>
+      </svg>
+    </section>
+    
+      
+    <section class="chart-card">
+      <h2>시간대별 구매 수</h2>
+      <p class="chart-subtitle">전체 주문량 기준으로 시간대별로 단순 집계한 결과입니다.</p>
+      <svg viewBox="0 0 860 280" role="img" aria-label="시간대별 구매 수">
+        <line x1='48' y1='238.00' x2='844' y2='238.00' class='guide' /><text x='40' y='242.00' text-anchor='end' class='axis-label'>0</text><line x1='48' y1='187.50' x2='844' y2='187.50' class='guide' /><text x='40' y='191.50' text-anchor='end' class='axis-label'>18</text><line x1='48' y1='137.00' x2='844' y2='137.00' class='guide' /><text x='40' y='141.00' text-anchor='end' class='axis-label'>36</text><line x1='48' y1='86.50' x2='844' y2='86.50' class='guide' /><text x='40' y='90.50' text-anchor='end' class='axis-label'>55</text><line x1='48' y1='36.00' x2='844' y2='36.00' class='guide' /><text x='40' y='40.00' text-anchor='end' class='axis-label'>73</text>
+        <line x1="48" y1="238" x2="844" y2="238" class="axis" />
+        <rect x='52.00' y='49.84' width='25.17' height='188.16' rx='4' fill='#059669' /><text x='64.58' y='43.84' text-anchor='middle' class='bar-value'>68</text><rect x='85.17' y='88.58' width='25.17' height='149.42' rx='4' fill='#059669' /><text x='97.75' y='82.58' text-anchor='middle' class='bar-value'>54</text><rect x='118.33' y='143.92' width='25.17' height='94.08' rx='4' fill='#059669' /><text x='130.92' y='137.92' text-anchor='middle' class='bar-value'>34</text><rect x='151.50' y='179.89' width='25.17' height='58.11' rx='4' fill='#059669' /><text x='164.08' y='173.89' text-anchor='middle' class='bar-value'>21</text><rect x='184.67' y='207.56' width='25.17' height='30.44' rx='4' fill='#059669' /><text x='197.25' y='201.56' text-anchor='middle' class='bar-value'>11</text><rect x='217.83' y='226.93' width='25.17' height='11.07' rx='4' fill='#059669' /><text x='230.42' y='220.93' text-anchor='middle' class='bar-value'>4</text><rect x='251.00' y='210.33' width='25.17' height='27.67' rx='4' fill='#059669' /><text x='263.58' y='204.33' text-anchor='middle' class='bar-value'>10</text><rect x='284.17' y='190.96' width='25.17' height='47.04' rx='4' fill='#059669' /><text x='296.75' y='184.96' text-anchor='middle' class='bar-value'>17</text><rect x='317.33' y='182.66' width='25.17' height='55.34' rx='4' fill='#059669' /><text x='329.92' y='176.66' text-anchor='middle' class='bar-value'>20</text><rect x='350.50' y='174.36' width='25.17' height='63.64' rx='4' fill='#059669' /><text x='363.08' y='168.36' text-anchor='middle' class='bar-value'>23</text><rect x='383.67' y='132.85' width='25.17' height='105.15' rx='4' fill='#059669' /><text x='396.25' y='126.85' text-anchor='middle' class='bar-value'>38</text><rect x='416.83' y='141.15' width='25.17' height='96.85' rx='4' fill='#059669' /><text x='429.42' y='135.15' text-anchor='middle' class='bar-value'>35</text><rect x='450.00' y='124.55' width='25.17' height='113.45' rx='4' fill='#059669' /><text x='462.58' y='118.55' text-anchor='middle' class='bar-value'>41</text><rect x='483.17' y='116.25' width='25.17' height='121.75' rx='4' fill='#059669' /><text x='495.75' y='110.25' text-anchor='middle' class='bar-value'>44</text><rect x='516.33' y='127.32' width='25.17' height='110.68' rx='4' fill='#059669' /><text x='528.92' y='121.32' text-anchor='middle' class='bar-value'>40</text><rect x='549.50' y='154.99' width='25.17' height='83.01' rx='4' fill='#059669' /><text x='562.08' y='148.99' text-anchor='middle' class='bar-value'>30</text><rect x='582.67' y='132.85' width='25.17' height='105.15' rx='4' fill='#059669' /><text x='595.25' y='126.85' text-anchor='middle' class='bar-value'>38</text><rect x='615.83' y='157.75' width='25.17' height='80.25' rx='4' fill='#059669' /><text x='628.42' y='151.75' text-anchor='middle' class='bar-value'>29</text><rect x='649.00' y='135.62' width='25.17' height='102.38' rx='4' fill='#059669' /><text x='661.58' y='129.62' text-anchor='middle' class='bar-value'>37</text><rect x='682.17' y='119.01' width='25.17' height='118.99' rx='4' fill='#059669' /><text x='694.75' y='113.01' text-anchor='middle' class='bar-value'>43</text><rect x='715.33' y='116.25' width='25.17' height='121.75' rx='4' fill='#059669' /><text x='727.92' y='110.25' text-anchor='middle' class='bar-value'>44</text><rect x='748.50' y='55.37' width='25.17' height='182.63' rx='4' fill='#059669' /><text x='761.08' y='49.37' text-anchor='middle' class='bar-value'>66</text><rect x='781.67' y='36.00' width='25.17' height='202.00' rx='4' fill='#059669' /><text x='794.25' y='30.00' text-anchor='middle' class='bar-value'>73</text><rect x='814.83' y='107.95' width='25.17' height='130.05' rx='4' fill='#059669' /><text x='827.42' y='101.95' text-anchor='middle' class='bar-value'>47</text>
+        <text x='64.58' y='266' text-anchor='middle' class='axis-label'>00</text><text x='97.75' y='266' text-anchor='middle' class='axis-label'>01</text><text x='130.92' y='266' text-anchor='middle' class='axis-label'>02</text><text x='164.08' y='266' text-anchor='middle' class='axis-label'>03</text><text x='197.25' y='266' text-anchor='middle' class='axis-label'>04</text><text x='230.42' y='266' text-anchor='middle' class='axis-label'>05</text><text x='263.58' y='266' text-anchor='middle' class='axis-label'>06</text><text x='296.75' y='266' text-anchor='middle' class='axis-label'>07</text><text x='329.92' y='266' text-anchor='middle' class='axis-label'>08</text><text x='363.08' y='266' text-anchor='middle' class='axis-label'>09</text><text x='396.25' y='266' text-anchor='middle' class='axis-label'>10</text><text x='429.42' y='266' text-anchor='middle' class='axis-label'>11</text><text x='462.58' y='266' text-anchor='middle' class='axis-label'>12</text><text x='495.75' y='266' text-anchor='middle' class='axis-label'>13</text><text x='528.92' y='266' text-anchor='middle' class='axis-label'>14</text><text x='562.08' y='266' text-anchor='middle' class='axis-label'>15</text><text x='595.25' y='266' text-anchor='middle' class='axis-label'>16</text><text x='628.42' y='266' text-anchor='middle' class='axis-label'>17</text><text x='661.58' y='266' text-anchor='middle' class='axis-label'>18</text><text x='694.75' y='266' text-anchor='middle' class='axis-label'>19</text><text x='727.92' y='266' text-anchor='middle' class='axis-label'>20</text><text x='761.08' y='266' text-anchor='middle' class='axis-label'>21</text><text x='794.25' y='266' text-anchor='middle' class='axis-label'>22</text><text x='827.42' y='266' text-anchor='middle' class='axis-label'>23</text>
+      </svg>
+    </section>
+    
+      
+    <section class="chart-card">
+      <h2>시간대별 매출</h2>
+      <p class="chart-subtitle">시간대별로 매출을 단순 집계한 결과입니다.</p>
+      <svg viewBox="0 0 860 280" role="img" aria-label="시간대별 매출">
+        <line x1='48' y1='238.00' x2='844' y2='238.00' class='guide' /><text x='40' y='242.00' text-anchor='end' class='axis-label'>0</text><line x1='48' y1='187.50' x2='844' y2='187.50' class='guide' /><text x='40' y='191.50' text-anchor='end' class='axis-label'>369,802</text><line x1='48' y1='137.00' x2='844' y2='137.00' class='guide' /><text x='40' y='141.00' text-anchor='end' class='axis-label'>739,605</text><line x1='48' y1='86.50' x2='844' y2='86.50' class='guide' /><text x='40' y='90.50' text-anchor='end' class='axis-label'>1,109,408</text><line x1='48' y1='36.00' x2='844' y2='36.00' class='guide' /><text x='40' y='40.00' text-anchor='end' class='axis-label'>1,479,210</text>
+        <line x1="48" y1="238" x2="844" y2="238" class="axis" />
+        <rect x='52.00' y='36.00' width='25.17' height='202.00' rx='4' fill='#0f766e' /><text x='64.58' y='30.00' text-anchor='middle' class='bar-value'>1,479,210</text><rect x='85.17' y='102.77' width='25.17' height='135.23' rx='4' fill='#0f766e' /><text x='97.75' y='96.77' text-anchor='middle' class='bar-value'>990,300</text><rect x='118.33' y='130.41' width='25.17' height='107.59' rx='4' fill='#0f766e' /><text x='130.92' y='124.41' text-anchor='middle' class='bar-value'>787,830</text><rect x='151.50' y='174.14' width='25.17' height='63.86' rx='4' fill='#0f766e' /><text x='164.08' y='168.14' text-anchor='middle' class='bar-value'>467,650</text><rect x='184.67' y='196.38' width='25.17' height='41.62' rx='4' fill='#0f766e' /><text x='197.25' y='190.38' text-anchor='middle' class='bar-value'>304,800</text><rect x='217.83' y='231.57' width='25.17' height='6.43' rx='4' fill='#0f766e' /><text x='230.42' y='225.57' text-anchor='middle' class='bar-value'>47,100</text><rect x='251.00' y='211.73' width='25.17' height='26.27' rx='4' fill='#0f766e' /><text x='263.58' y='205.73' text-anchor='middle' class='bar-value'>192,400</text><rect x='284.17' y='179.24' width='25.17' height='58.76' rx='4' fill='#0f766e' /><text x='296.75' y='173.24' text-anchor='middle' class='bar-value'>430,300</text><rect x='317.33' y='178.32' width='25.17' height='59.68' rx='4' fill='#0f766e' /><text x='329.92' y='172.32' text-anchor='middle' class='bar-value'>437,060</text><rect x='350.50' y='158.55' width='25.17' height='79.45' rx='4' fill='#0f766e' /><text x='363.08' y='152.55' text-anchor='middle' class='bar-value'>581,800</text><rect x='383.67' y='100.11' width='25.17' height='137.89' rx='4' fill='#0f766e' /><text x='396.25' y='94.11' text-anchor='middle' class='bar-value'>1,009,710</text><rect x='416.83' y='114.28' width='25.17' height='123.72' rx='4' fill='#0f766e' /><text x='429.42' y='108.28' text-anchor='middle' class='bar-value'>906,000</text><rect x='450.00' y='77.13' width='25.17' height='160.87' rx='4' fill='#0f766e' /><text x='462.58' y='71.13' text-anchor='middle' class='bar-value'>1,178,050</text><rect x='483.17' y='95.79' width='25.17' height='142.21' rx='4' fill='#0f766e' /><text x='495.75' y='89.79' text-anchor='middle' class='bar-value'>1,041,400</text><rect x='516.33' y='95.19' width='25.17' height='142.81' rx='4' fill='#0f766e' /><text x='528.92' y='89.19' text-anchor='middle' class='bar-value'>1,045,800</text><rect x='549.50' y='147.49' width='25.17' height='90.51' rx='4' fill='#0f766e' /><text x='562.08' y='141.49' text-anchor='middle' class='bar-value'>662,760</text><rect x='582.67' y='111.67' width='25.17' height='126.33' rx='4' fill='#0f766e' /><text x='595.25' y='105.67' text-anchor='middle' class='bar-value'>925,100</text><rect x='615.83' y='144.95' width='25.17' height='93.05' rx='4' fill='#0f766e' /><text x='628.42' y='138.95' text-anchor='middle' class='bar-value'>681,400</text><rect x='649.00' y='126.25' width='25.17' height='111.75' rx='4' fill='#0f766e' /><text x='661.58' y='120.25' text-anchor='middle' class='bar-value'>818,320</text><rect x='682.17' y='112.54' width='25.17' height='125.46' rx='4' fill='#0f766e' /><text x='694.75' y='106.54' text-anchor='middle' class='bar-value'>918,700</text><rect x='715.33' y='90.27' width='25.17' height='147.73' rx='4' fill='#0f766e' /><text x='727.92' y='84.27' text-anchor='middle' class='bar-value'>1,081,800</text><rect x='748.50' y='46.86' width='25.17' height='191.14' rx='4' fill='#0f766e' /><text x='761.08' y='40.86' text-anchor='middle' class='bar-value'>1,399,710</text><rect x='781.67' y='40.79' width='25.17' height='197.21' rx='4' fill='#0f766e' /><text x='794.25' y='34.79' text-anchor='middle' class='bar-value'>1,444,170</text><rect x='814.83' y='111.28' width='25.17' height='126.72' rx='4' fill='#0f766e' /><text x='827.42' y='105.28' text-anchor='middle' class='bar-value'>927,950</text>
+        <text x='64.58' y='266' text-anchor='middle' class='axis-label'>00</text><text x='97.75' y='266' text-anchor='middle' class='axis-label'>01</text><text x='130.92' y='266' text-anchor='middle' class='axis-label'>02</text><text x='164.08' y='266' text-anchor='middle' class='axis-label'>03</text><text x='197.25' y='266' text-anchor='middle' class='axis-label'>04</text><text x='230.42' y='266' text-anchor='middle' class='axis-label'>05</text><text x='263.58' y='266' text-anchor='middle' class='axis-label'>06</text><text x='296.75' y='266' text-anchor='middle' class='axis-label'>07</text><text x='329.92' y='266' text-anchor='middle' class='axis-label'>08</text><text x='363.08' y='266' text-anchor='middle' class='axis-label'>09</text><text x='396.25' y='266' text-anchor='middle' class='axis-label'>10</text><text x='429.42' y='266' text-anchor='middle' class='axis-label'>11</text><text x='462.58' y='266' text-anchor='middle' class='axis-label'>12</text><text x='495.75' y='266' text-anchor='middle' class='axis-label'>13</text><text x='528.92' y='266' text-anchor='middle' class='axis-label'>14</text><text x='562.08' y='266' text-anchor='middle' class='axis-label'>15</text><text x='595.25' y='266' text-anchor='middle' class='axis-label'>16</text><text x='628.42' y='266' text-anchor='middle' class='axis-label'>17</text><text x='661.58' y='266' text-anchor='middle' class='axis-label'>18</text><text x='694.75' y='266' text-anchor='middle' class='axis-label'>19</text><text x='727.92' y='266' text-anchor='middle' class='axis-label'>20</text><text x='761.08' y='266' text-anchor='middle' class='axis-label'>21</text><text x='794.25' y='266' text-anchor='middle' class='axis-label'>22</text><text x='827.42' y='266' text-anchor='middle' class='axis-label'>23</text>
+      </svg>
+    </section>
+    
+      
+    <section class="chart-card">
+      <h2>시간대별 구매전환 수</h2>
+      <p class="chart-subtitle">주문 1건당 가장 가까운 직전 상품 조회형 이벤트를 구매전환으로 정의하고 구매전환을 주문 조회 시점을 기준으로 집계한 결과입니다.</p>
+      <svg viewBox="0 0 860 280" role="img" aria-label="시간대별 구매전환 수">
+        <line x1='48' y1='238.00' x2='844' y2='238.00' class='guide' /><text x='40' y='242.00' text-anchor='end' class='axis-label'>0</text><line x1='48' y1='187.50' x2='844' y2='187.50' class='guide' /><text x='40' y='191.50' text-anchor='end' class='axis-label'>15</text><line x1='48' y1='137.00' x2='844' y2='137.00' class='guide' /><text x='40' y='141.00' text-anchor='end' class='axis-label'>30</text><line x1='48' y1='86.50' x2='844' y2='86.50' class='guide' /><text x='40' y='90.50' text-anchor='end' class='axis-label'>46</text><line x1='48' y1='36.00' x2='844' y2='36.00' class='guide' /><text x='40' y='40.00' text-anchor='end' class='axis-label'>61</text>
+        <line x1="48" y1="238" x2="844" y2="238" class="axis" />
+        <rect x='52.00' y='55.87' width='25.17' height='182.13' rx='4' fill='#7c3aed' /><text x='64.58' y='49.87' text-anchor='middle' class='bar-value'>55</text><rect x='85.17' y='95.61' width='25.17' height='142.39' rx='4' fill='#7c3aed' /><text x='97.75' y='89.61' text-anchor='middle' class='bar-value'>43</text><rect x='118.33' y='155.21' width='25.17' height='82.79' rx='4' fill='#7c3aed' /><text x='130.92' y='149.21' text-anchor='middle' class='bar-value'>25</text><rect x='151.50' y='185.02' width='25.17' height='52.98' rx='4' fill='#7c3aed' /><text x='164.08' y='179.02' text-anchor='middle' class='bar-value'>16</text><rect x='184.67' y='204.89' width='25.17' height='33.11' rx='4' fill='#7c3aed' /><text x='197.25' y='198.89' text-anchor='middle' class='bar-value'>10</text><rect x='217.83' y='228.07' width='25.17' height='9.93' rx='4' fill='#7c3aed' /><text x='230.42' y='222.07' text-anchor='middle' class='bar-value'>3</text><rect x='251.00' y='208.20' width='25.17' height='29.80' rx='4' fill='#7c3aed' /><text x='263.58' y='202.20' text-anchor='middle' class='bar-value'>9</text><rect x='284.17' y='191.64' width='25.17' height='46.36' rx='4' fill='#7c3aed' /><text x='296.75' y='185.64' text-anchor='middle' class='bar-value'>14</text><rect x='317.33' y='181.70' width='25.17' height='56.30' rx='4' fill='#7c3aed' /><text x='329.92' y='175.70' text-anchor='middle' class='bar-value'>17</text><rect x='350.50' y='171.77' width='25.17' height='66.23' rx='4' fill='#7c3aed' /><text x='363.08' y='165.77' text-anchor='middle' class='bar-value'>20</text><rect x='383.67' y='132.03' width='25.17' height='105.97' rx='4' fill='#7c3aed' /><text x='396.25' y='126.03' text-anchor='middle' class='bar-value'>32</text><rect x='416.83' y='145.28' width='25.17' height='92.72' rx='4' fill='#7c3aed' /><text x='429.42' y='139.28' text-anchor='middle' class='bar-value'>28</text><rect x='450.00' y='132.03' width='25.17' height='105.97' rx='4' fill='#7c3aed' /><text x='462.58' y='126.03' text-anchor='middle' class='bar-value'>32</text><rect x='483.17' y='128.72' width='25.17' height='109.28' rx='4' fill='#7c3aed' /><text x='495.75' y='122.72' text-anchor='middle' class='bar-value'>33</text><rect x='516.33' y='122.10' width='25.17' height='115.90' rx='4' fill='#7c3aed' /><text x='528.92' y='116.10' text-anchor='middle' class='bar-value'>35</text><rect x='549.50' y='155.21' width='25.17' height='82.79' rx='4' fill='#7c3aed' /><text x='562.08' y='149.21' text-anchor='middle' class='bar-value'>25</text><rect x='582.67' y='138.66' width='25.17' height='99.34' rx='4' fill='#7c3aed' /><text x='595.25' y='132.66' text-anchor='middle' class='bar-value'>30</text><rect x='615.83' y='165.15' width='25.17' height='72.85' rx='4' fill='#7c3aed' /><text x='628.42' y='159.15' text-anchor='middle' class='bar-value'>22</text><rect x='649.00' y='148.59' width='25.17' height='89.41' rx='4' fill='#7c3aed' /><text x='661.58' y='142.59' text-anchor='middle' class='bar-value'>27</text><rect x='682.17' y='122.10' width='25.17' height='115.90' rx='4' fill='#7c3aed' /><text x='694.75' y='116.10' text-anchor='middle' class='bar-value'>35</text><rect x='715.33' y='122.10' width='25.17' height='115.90' rx='4' fill='#7c3aed' /><text x='727.92' y='116.10' text-anchor='middle' class='bar-value'>35</text><rect x='748.50' y='36.00' width='25.17' height='202.00' rx='4' fill='#7c3aed' /><text x='761.08' y='30.00' text-anchor='middle' class='bar-value'>61</text><rect x='781.67' y='39.31' width='25.17' height='198.69' rx='4' fill='#7c3aed' /><text x='794.25' y='33.31' text-anchor='middle' class='bar-value'>60</text><rect x='814.83' y='112.16' width='25.17' height='125.84' rx='4' fill='#7c3aed' /><text x='827.42' y='106.16' text-anchor='middle' class='bar-value'>38</text>
+        <text x='64.58' y='266' text-anchor='middle' class='axis-label'>00</text><text x='97.75' y='266' text-anchor='middle' class='axis-label'>01</text><text x='130.92' y='266' text-anchor='middle' class='axis-label'>02</text><text x='164.08' y='266' text-anchor='middle' class='axis-label'>03</text><text x='197.25' y='266' text-anchor='middle' class='axis-label'>04</text><text x='230.42' y='266' text-anchor='middle' class='axis-label'>05</text><text x='263.58' y='266' text-anchor='middle' class='axis-label'>06</text><text x='296.75' y='266' text-anchor='middle' class='axis-label'>07</text><text x='329.92' y='266' text-anchor='middle' class='axis-label'>08</text><text x='363.08' y='266' text-anchor='middle' class='axis-label'>09</text><text x='396.25' y='266' text-anchor='middle' class='axis-label'>10</text><text x='429.42' y='266' text-anchor='middle' class='axis-label'>11</text><text x='462.58' y='266' text-anchor='middle' class='axis-label'>12</text><text x='495.75' y='266' text-anchor='middle' class='axis-label'>13</text><text x='528.92' y='266' text-anchor='middle' class='axis-label'>14</text><text x='562.08' y='266' text-anchor='middle' class='axis-label'>15</text><text x='595.25' y='266' text-anchor='middle' class='axis-label'>16</text><text x='628.42' y='266' text-anchor='middle' class='axis-label'>17</text><text x='661.58' y='266' text-anchor='middle' class='axis-label'>18</text><text x='694.75' y='266' text-anchor='middle' class='axis-label'>19</text><text x='727.92' y='266' text-anchor='middle' class='axis-label'>20</text><text x='761.08' y='266' text-anchor='middle' class='axis-label'>21</text><text x='794.25' y='266' text-anchor='middle' class='axis-label'>22</text><text x='827.42' y='266' text-anchor='middle' class='axis-label'>23</text>
+      </svg>
+    </section>
+    
+      
+    <section class="chart-card">
+      <h2>시간대별 구매전환율</h2>
+      <p class="chart-subtitle">각 시간대의 상품 조회 이벤트 대비 구매 전환 비율입니다.</p>
+      <svg viewBox="0 0 860 280" role="img" aria-label="시간대별 구매전환율">
+        <line x1='48' y1='238.00' x2='844' y2='238.00' class='guide' /><text x='40' y='242.00' text-anchor='end' class='axis-label'>0.00%</text><line x1='48' y1='187.50' x2='844' y2='187.50' class='guide' /><text x='40' y='191.50' text-anchor='end' class='axis-label'>1.76%</text><line x1='48' y1='137.00' x2='844' y2='137.00' class='guide' /><text x='40' y='141.00' text-anchor='end' class='axis-label'>3.53%</text><line x1='48' y1='86.50' x2='844' y2='86.50' class='guide' /><text x='40' y='90.50' text-anchor='end' class='axis-label'>5.29%</text><line x1='48' y1='36.00' x2='844' y2='36.00' class='guide' /><text x='40' y='40.00' text-anchor='end' class='axis-label'>7.06%</text>
+        <line x1="48" y1="238" x2="844" y2="238" class="axis" />
+        <rect x='52.00' y='111.82' width='25.17' height='126.18' rx='4' fill='#dc2626' /><text x='64.58' y='105.82' text-anchor='middle' class='bar-value'>4.41%</text><rect x='85.17' y='95.23' width='25.17' height='142.77' rx='4' fill='#dc2626' /><text x='97.75' y='89.23' text-anchor='middle' class='bar-value'>4.99%</text><rect x='118.33' y='105.81' width='25.17' height='132.19' rx='4' fill='#dc2626' /><text x='130.92' y='99.81' text-anchor='middle' class='bar-value'>4.62%</text><rect x='151.50' y='83.78' width='25.17' height='154.22' rx='4' fill='#dc2626' /><text x='164.08' y='77.78' text-anchor='middle' class='bar-value'>5.39%</text><rect x='184.67' y='109.82' width='25.17' height='128.18' rx='4' fill='#dc2626' /><text x='197.25' y='103.82' text-anchor='middle' class='bar-value'>4.48%</text><rect x='217.83' y='178.77' width='25.17' height='59.23' rx='4' fill='#dc2626' /><text x='230.42' y='172.77' text-anchor='middle' class='bar-value'>2.07%</text><rect x='251.00' y='67.47' width='25.17' height='170.53' rx='4' fill='#dc2626' /><text x='263.58' y='61.47' text-anchor='middle' class='bar-value'>5.96%</text><rect x='284.17' y='45.44' width='25.17' height='192.56' rx='4' fill='#dc2626' /><text x='296.75' y='39.44' text-anchor='middle' class='bar-value'>6.73%</text><rect x='317.33' y='77.49' width='25.17' height='160.51' rx='4' fill='#dc2626' /><text x='329.92' y='71.49' text-anchor='middle' class='bar-value'>5.61%</text><rect x='350.50' y='52.88' width='25.17' height='185.12' rx='4' fill='#dc2626' /><text x='363.08' y='46.88' text-anchor='middle' class='bar-value'>6.47%</text><rect x='383.67' y='36.00' width='25.17' height='202.00' rx='4' fill='#dc2626' /><text x='396.25' y='30.00' text-anchor='middle' class='bar-value'>7.06%</text><rect x='416.83' y='90.36' width='25.17' height='147.64' rx='4' fill='#dc2626' /><text x='429.42' y='84.36' text-anchor='middle' class='bar-value'>5.16%</text><rect x='450.00' y='67.47' width='25.17' height='170.53' rx='4' fill='#dc2626' /><text x='462.58' y='61.47' text-anchor='middle' class='bar-value'>5.96%</text><rect x='483.17' y='89.50' width='25.17' height='148.50' rx='4' fill='#dc2626' /><text x='495.75' y='83.50' text-anchor='middle' class='bar-value'>5.19%</text><rect x='516.33' y='77.77' width='25.17' height='160.23' rx='4' fill='#dc2626' /><text x='528.92' y='71.77' text-anchor='middle' class='bar-value'>5.60%</text><rect x='549.50' y='119.55' width='25.17' height='118.45' rx='4' fill='#dc2626' /><text x='562.08' y='113.55' text-anchor='middle' class='bar-value'>4.14%</text><rect x='582.67' y='86.07' width='25.17' height='151.93' rx='4' fill='#dc2626' /><text x='595.25' y='80.07' text-anchor='middle' class='bar-value'>5.31%</text><rect x='615.83' y='135.28' width='25.17' height='102.72' rx='4' fill='#dc2626' /><text x='628.42' y='129.28' text-anchor='middle' class='bar-value'>3.59%</text><rect x='649.00' y='116.69' width='25.17' height='121.31' rx='4' fill='#dc2626' /><text x='661.58' y='110.69' text-anchor='middle' class='bar-value'>4.24%</text><rect x='682.17' y='107.24' width='25.17' height='130.76' rx='4' fill='#dc2626' /><text x='694.75' y='101.24' text-anchor='middle' class='bar-value'>4.57%</text><rect x='715.33' y='123.84' width='25.17' height='114.16' rx='4' fill='#dc2626' /><text x='727.92' y='117.84' text-anchor='middle' class='bar-value'>3.99%</text><rect x='748.50' y='76.06' width='25.17' height='161.94' rx='4' fill='#dc2626' /><text x='761.08' y='70.06' text-anchor='middle' class='bar-value'>5.66%</text><rect x='781.67' y='110.39' width='25.17' height='127.61' rx='4' fill='#dc2626' /><text x='794.25' y='104.39' text-anchor='middle' class='bar-value'>4.46%</text><rect x='814.83' y='147.01' width='25.17' height='90.99' rx='4' fill='#dc2626' /><text x='827.42' y='141.01' text-anchor='middle' class='bar-value'>3.18%</text>
+        <text x='64.58' y='266' text-anchor='middle' class='axis-label'>00</text><text x='97.75' y='266' text-anchor='middle' class='axis-label'>01</text><text x='130.92' y='266' text-anchor='middle' class='axis-label'>02</text><text x='164.08' y='266' text-anchor='middle' class='axis-label'>03</text><text x='197.25' y='266' text-anchor='middle' class='axis-label'>04</text><text x='230.42' y='266' text-anchor='middle' class='axis-label'>05</text><text x='263.58' y='266' text-anchor='middle' class='axis-label'>06</text><text x='296.75' y='266' text-anchor='middle' class='axis-label'>07</text><text x='329.92' y='266' text-anchor='middle' class='axis-label'>08</text><text x='363.08' y='266' text-anchor='middle' class='axis-label'>09</text><text x='396.25' y='266' text-anchor='middle' class='axis-label'>10</text><text x='429.42' y='266' text-anchor='middle' class='axis-label'>11</text><text x='462.58' y='266' text-anchor='middle' class='axis-label'>12</text><text x='495.75' y='266' text-anchor='middle' class='axis-label'>13</text><text x='528.92' y='266' text-anchor='middle' class='axis-label'>14</text><text x='562.08' y='266' text-anchor='middle' class='axis-label'>15</text><text x='595.25' y='266' text-anchor='middle' class='axis-label'>16</text><text x='628.42' y='266' text-anchor='middle' class='axis-label'>17</text><text x='661.58' y='266' text-anchor='middle' class='axis-label'>18</text><text x='694.75' y='266' text-anchor='middle' class='axis-label'>19</text><text x='727.92' y='266' text-anchor='middle' class='axis-label'>20</text><text x='761.08' y='266' text-anchor='middle' class='axis-label'>21</text><text x='794.25' y='266' text-anchor='middle' class='axis-label'>22</text><text x='827.42' y='266' text-anchor='middle' class='axis-label'>23</text>
+      </svg>
+    </section>
+    
+    </div>
+  </div>
+</body>
+</html>

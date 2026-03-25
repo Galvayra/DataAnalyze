@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>3. 연령대별 주문 추이</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 32px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+    .hero, .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+    }
+    .hero {
+      margin-bottom: 20px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+    h2 {
+      margin: 0 0 6px;
+      font-size: 20px;
+    }
+    .hero p, .subtitle {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .subtitle {
+      margin-bottom: 14px;
+    }
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .kpi {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .label {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+    .value {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .grid {
+      display: grid;
+      gap: 20px;
+    }
+    svg {
+      width: 100%;
+      height: auto;
+      overflow: visible;
+    }
+    .guide {
+      stroke: #e5e7eb;
+      stroke-width: 1;
+      stroke-dasharray: 4 4;
+    }
+    .axis {
+      stroke: #9ca3af;
+      stroke-width: 1.2;
+    }
+    .axis-label {
+      fill: #6b7280;
+      font-size: 11px;
+    }
+    .bar-value {
+      fill: #374151;
+      font-size: 9px;
+    }
+    .legend {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .legend-swatch {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+    th, td {
+      border-bottom: 1px solid var(--border);
+      padding: 10px 8px;
+      text-align: right;
+      font-size: 14px;
+      vertical-align: middle;
+      word-break: keep-all;
+    }
+    th:first-child, td:first-child {
+      text-align: left;
+    }
+    .heatmap-table th, .heatmap-table td {
+      text-align: center;
+    }
+    .insight-list {
+      margin: 0;
+      padding-left: 20px;
+      line-height: 1.7;
+    }
+    @media (max-width: 900px) {
+      body { padding: 16px; }
+      .kpis { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <h1>3. 연령대별 주문 추이</h1>
+      <p>연령대별 주문 수, 방문자 대비 구매자 비율, 시간대별 주문 분포와 행동/구매 요약을 비교한 결과입니다.</p>
+      <div class="kpis">
+            <div class="kpi">
+              <div class="label">구매자 비율 최고 연령대</div>
+              <div class="value">20대 후반 (12.12%)</div>
+            </div>
+            
+            <div class="kpi">
+              <div class="label">객단가 최고 연령대</div>
+              <div class="value">40대 이상 (32,098원)</div>
+            </div>
+            
+            <div class="kpi">
+              <div class="label">주문 수 최고 연령대</div>
+              <div class="value">10대 (204건)</div>
+            </div>
+            </div>
+    </section>
+    <div class="grid">
+      
+    <section class="card">
+      <h2>해석 포인트</h2>
+      <ul class="insight-list"><li>미정 연령(-1)은 제외했고, 10대와 40대 이상은 각각 하나의 구간으로, 20대와 30대는 초반·중반·후반으로 세분화했습니다.</li><li>주문 수와 시간대 주문 히트맵은 전체 주문 데이터를 기준으로 집계했습니다.</li><li>연령별 카테고리 선호도는 `enter_browser=0.1`, `add_my_goods=1`, `remove_my_goods=-1` 가중치를 적용한 점수입니다.</li></ul>
+    </section>
+    
+    <section class="card">
+      <h2>전체 가입자수 기준 연령 분포</h2>
+      <p class="subtitle">전체 가입자수에서 각 연령대가 차지하는 비율을 보여주며, 미정 연령도 함께 포함했습니다.</p>
+      <div style="display:grid; grid-template-columns:minmax(260px, 320px) 1fr; gap:20px; align-items:center;">
+        <div style="display:flex; justify-content:center;">
+          <svg viewBox="0 0 260 260" role="img" aria-label="전체 가입자수 기준 연령 분포">
+            <g transform="translate(130,130) rotate(-90)">
+              <circle cx="0" cy="0" r="88" fill="none" stroke="#e5e7eb" stroke-width="28"></circle>
+              
+              <circle
+                cx="0"
+                cy="0"
+                r="88"
+                fill="none"
+                stroke="#4f46e5"
+                stroke-width="28"
+                stroke-linecap="butt"
+                stroke-dasharray="96.04 552.92"
+                stroke-dashoffset="-0.00"
+              ></circle>
+            
+              <circle
+                cx="0"
+                cy="0"
+                r="88"
+                fill="none"
+                stroke="#2563eb"
+                stroke-width="28"
+                stroke-linecap="butt"
+                stroke-dasharray="73.81 552.92"
+                stroke-dashoffset="-96.04"
+              ></circle>
+            
+              <circle
+                cx="0"
+                cy="0"
+                r="88"
+                fill="none"
+                stroke="#0891b2"
+                stroke-width="28"
+                stroke-linecap="butt"
+                stroke-dasharray="55.68 552.92"
+                stroke-dashoffset="-169.86"
+              ></circle>
+            
+              <circle
+                cx="0"
+                cy="0"
+                r="88"
+                fill="none"
+                stroke="#059669"
+                stroke-width="28"
+                stroke-linecap="butt"
+                stroke-dasharray="55.68 552.92"
+                stroke-dashoffset="-225.54"
+              ></circle>
+            
+              <circle
+                cx="0"
+                cy="0"
+                r="88"
+                fill="none"
+                stroke="#65a30d"
+                stroke-width="28"
+                stroke-linecap="butt"
+                stroke-dasharray="72.60 552.92"
+                stroke-dashoffset="-281.22"
+              ></circle>
+            
+              <circle
+                cx="0"
+                cy="0"
+                r="88"
+                fill="none"
+                stroke="#ca8a04"
+                stroke-width="28"
+                stroke-linecap="butt"
+                stroke-dasharray="54.41 552.92"
+                stroke-dashoffset="-353.81"
+              ></circle>
+            
+              <circle
+                cx="0"
+                cy="0"
+                r="88"
+                fill="none"
+                stroke="#ea580c"
+                stroke-width="28"
+                stroke-linecap="butt"
+                stroke-dasharray="52.53 552.92"
+                stroke-dashoffset="-408.22"
+              ></circle>
+            
+              <circle
+                cx="0"
+                cy="0"
+                r="88"
+                fill="none"
+                stroke="#dc2626"
+                stroke-width="28"
+                stroke-linecap="butt"
+                stroke-dasharray="73.21 552.92"
+                stroke-dashoffset="-460.75"
+              ></circle>
+            
+              <circle
+                cx="0"
+                cy="0"
+                r="88"
+                fill="none"
+                stroke="#6b7280"
+                stroke-width="28"
+                stroke-linecap="butt"
+                stroke-dasharray="18.97 552.92"
+                stroke-dashoffset="-533.96"
+              ></circle>
+            
+            </g>
+            <text x="130" y="122" text-anchor="middle" style="fill:#6b7280; font-size:13px;">전체 가입자수</text>
+            <text x="130" y="148" text-anchor="middle" style="fill:#111827; font-size:22px; font-weight:700;">10,000명</text>
+          </svg>
+        </div>
+        <div style="display:grid; gap:12px;">
+          
+            <div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid #e5e7eb; border-radius:12px; background:#f8fafc;">
+              <span style="width:12px; height:12px; border-radius:999px; background:#4f46e5; display:inline-block;"></span>
+              <div>
+                <div style="color:#6b7280; font-size:13px;">10대</div>
+                <div style="font-size:18px; font-weight:700;">1,737명 (17.37%)</div>
+              </div>
+            </div>
+            
+            <div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid #e5e7eb; border-radius:12px; background:#f8fafc;">
+              <span style="width:12px; height:12px; border-radius:999px; background:#2563eb; display:inline-block;"></span>
+              <div>
+                <div style="color:#6b7280; font-size:13px;">20대 초반</div>
+                <div style="font-size:18px; font-weight:700;">1,335명 (13.35%)</div>
+              </div>
+            </div>
+            
+            <div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid #e5e7eb; border-radius:12px; background:#f8fafc;">
+              <span style="width:12px; height:12px; border-radius:999px; background:#0891b2; display:inline-block;"></span>
+              <div>
+                <div style="color:#6b7280; font-size:13px;">20대 중반</div>
+                <div style="font-size:18px; font-weight:700;">1,007명 (10.07%)</div>
+              </div>
+            </div>
+            
+            <div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid #e5e7eb; border-radius:12px; background:#f8fafc;">
+              <span style="width:12px; height:12px; border-radius:999px; background:#059669; display:inline-block;"></span>
+              <div>
+                <div style="color:#6b7280; font-size:13px;">20대 후반</div>
+                <div style="font-size:18px; font-weight:700;">1,007명 (10.07%)</div>
+              </div>
+            </div>
+            
+            <div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid #e5e7eb; border-radius:12px; background:#f8fafc;">
+              <span style="width:12px; height:12px; border-radius:999px; background:#65a30d; display:inline-block;"></span>
+              <div>
+                <div style="color:#6b7280; font-size:13px;">30대 초반</div>
+                <div style="font-size:18px; font-weight:700;">1,313명 (13.13%)</div>
+              </div>
+            </div>
+            
+            <div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid #e5e7eb; border-radius:12px; background:#f8fafc;">
+              <span style="width:12px; height:12px; border-radius:999px; background:#ca8a04; display:inline-block;"></span>
+              <div>
+                <div style="color:#6b7280; font-size:13px;">30대 중반</div>
+                <div style="font-size:18px; font-weight:700;">984명 (9.84%)</div>
+              </div>
+            </div>
+            
+            <div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid #e5e7eb; border-radius:12px; background:#f8fafc;">
+              <span style="width:12px; height:12px; border-radius:999px; background:#ea580c; display:inline-block;"></span>
+              <div>
+                <div style="color:#6b7280; font-size:13px;">30대 후반</div>
+                <div style="font-size:18px; font-weight:700;">950명 (9.50%)</div>
+              </div>
+            </div>
+            
+            <div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid #e5e7eb; border-radius:12px; background:#f8fafc;">
+              <span style="width:12px; height:12px; border-radius:999px; background:#dc2626; display:inline-block;"></span>
+              <div>
+                <div style="color:#6b7280; font-size:13px;">40대 이상</div>
+                <div style="font-size:18px; font-weight:700;">1,324명 (13.24%)</div>
+              </div>
+            </div>
+            
+            <div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid #e5e7eb; border-radius:12px; background:#f8fafc;">
+              <span style="width:12px; height:12px; border-radius:999px; background:#6b7280; display:inline-block;"></span>
+              <div>
+                <div style="color:#6b7280; font-size:13px;">미정</div>
+                <div style="font-size:18px; font-weight:700;">343명 (3.43%)</div>
+              </div>
+            </div>
+            
+        </div>
+      </div>
+    </section>
+    
+    <section class="card">
+      <h2>연령대별 주문 수</h2>
+      <p class="subtitle">전체 주문량 기준으로 어느 연령대가 많이 기여하는지 확인합니다.</p>
+      <svg viewBox="0 0 920 320" role="img" aria-label="연령대별 주문 수">
+        <line x1='56' y1='262.00' x2='904' y2='262.00' class='guide' /><text x='46' y='266.00' text-anchor='end' class='axis-label'>0</text><line x1='56' y1='205.50' x2='904' y2='205.50' class='guide' /><text x='46' y='209.50' text-anchor='end' class='axis-label'>51</text><line x1='56' y1='149.00' x2='904' y2='149.00' class='guide' /><text x='46' y='153.00' text-anchor='end' class='axis-label'>102</text><line x1='56' y1='92.50' x2='904' y2='92.50' class='guide' /><text x='46' y='96.50' text-anchor='end' class='axis-label'>153</text><line x1='56' y1='36.00' x2='904' y2='36.00' class='guide' /><text x='46' y='40.00' text-anchor='end' class='axis-label'>204</text>
+        <line x1="56" y1="262" x2="904" y2="262" class="axis" />
+        <rect x='60.00' y='36.00' width='98.00' height='226.00' rx='4' fill='#059669' /><text x='109.00' y='30.00' text-anchor='middle' class='bar-value'>204</text><rect x='166.00' y='86.96' width='98.00' height='175.04' rx='4' fill='#059669' /><text x='215.00' y='80.96' text-anchor='middle' class='bar-value'>158</text><rect x='272.00' y='131.27' width='98.00' height='130.73' rx='4' fill='#059669' /><text x='321.00' y='125.27' text-anchor='middle' class='bar-value'>118</text><rect x='378.00' y='121.30' width='98.00' height='140.70' rx='4' fill='#059669' /><text x='427.00' y='115.30' text-anchor='middle' class='bar-value'>127</text><rect x='484.00' y='114.66' width='98.00' height='147.34' rx='4' fill='#059669' /><text x='533.00' y='108.66' text-anchor='middle' class='bar-value'>133</text><rect x='590.00' y='209.93' width='98.00' height='52.07' rx='4' fill='#059669' /><text x='639.00' y='203.93' text-anchor='middle' class='bar-value'>47</text><rect x='696.00' y='243.17' width='98.00' height='18.83' rx='4' fill='#059669' /><text x='745.00' y='237.17' text-anchor='middle' class='bar-value'>17</text><rect x='802.00' y='239.84' width='98.00' height='22.16' rx='4' fill='#059669' /><text x='851.00' y='233.84' text-anchor='middle' class='bar-value'>20</text>
+        <text x='109.00' y='302' text-anchor='middle' class='axis-label'>10대</text><text x='215.00' y='302' text-anchor='middle' class='axis-label'>20대 초반</text><text x='321.00' y='302' text-anchor='middle' class='axis-label'>20대 중반</text><text x='427.00' y='302' text-anchor='middle' class='axis-label'>20대 후반</text><text x='533.00' y='302' text-anchor='middle' class='axis-label'>30대 초반</text><text x='639.00' y='302' text-anchor='middle' class='axis-label'>30대 중반</text><text x='745.00' y='302' text-anchor='middle' class='axis-label'>30대 후반</text><text x='851.00' y='302' text-anchor='middle' class='axis-label'>40대 이상</text>
+      </svg>
+    </section>
+    
+    <section class="card">
+      <h2>연령대별 구매자 비율</h2>
+      <p class="subtitle">연령대별 가입자 수 대비 1회 이상 구매 이력이 있는 구매자의 비율을 나타낸 결과입니다.</p>
+      <svg viewBox="0 0 920 320" role="img" aria-label="연령대별 구매자 비율">
+        <line x1='56' y1='262.00' x2='904' y2='262.00' class='guide' /><text x='46' y='266.00' text-anchor='end' class='axis-label'>0%</text><line x1='56' y1='205.50' x2='904' y2='205.50' class='guide' /><text x='46' y='209.50' text-anchor='end' class='axis-label'>3%</text><line x1='56' y1='149.00' x2='904' y2='149.00' class='guide' /><text x='46' y='153.00' text-anchor='end' class='axis-label'>6%</text><line x1='56' y1='92.50' x2='904' y2='92.50' class='guide' /><text x='46' y='96.50' text-anchor='end' class='axis-label'>9%</text><line x1='56' y1='36.00' x2='904' y2='36.00' class='guide' /><text x='46' y='40.00' text-anchor='end' class='axis-label'>12%</text>
+        <line x1="56" y1="262" x2="904" y2="262" class="axis" />
+        <rect x='60.00' y='54.83' width='98.00' height='207.17' rx='4' fill='#ea580c' /><text x='109.00' y='48.83' text-anchor='middle' class='bar-value'>11.11%</text><rect x='166.00' y='49.61' width='98.00' height='212.39' rx='4' fill='#ea580c' /><text x='215.00' y='43.61' text-anchor='middle' class='bar-value'>11.39%</text><rect x='272.00' y='54.65' width='98.00' height='207.35' rx='4' fill='#ea580c' /><text x='321.00' y='48.65' text-anchor='middle' class='bar-value'>11.12%</text><rect x='378.00' y='36.00' width='98.00' height='226.00' rx='4' fill='#ea580c' /><text x='427.00' y='30.00' text-anchor='middle' class='bar-value'>12.12%</text><rect x='484.00' y='78.89' width='98.00' height='183.11' rx='4' fill='#ea580c' /><text x='533.00' y='72.89' text-anchor='middle' class='bar-value'>9.82%</text><rect x='590.00' y='172.87' width='98.00' height='89.13' rx='4' fill='#ea580c' /><text x='639.00' y='166.87' text-anchor='middle' class='bar-value'>4.78%</text><rect x='696.00' y='230.67' width='98.00' height='31.33' rx='4' fill='#ea580c' /><text x='745.00' y='224.67' text-anchor='middle' class='bar-value'>1.68%</text><rect x='802.00' y='235.15' width='98.00' height='26.85' rx='4' fill='#ea580c' /><text x='851.00' y='229.15' text-anchor='middle' class='bar-value'>1.44%</text>
+        <text x='109.00' y='302' text-anchor='middle' class='axis-label'>10대</text><text x='215.00' y='302' text-anchor='middle' class='axis-label'>20대 초반</text><text x='321.00' y='302' text-anchor='middle' class='axis-label'>20대 중반</text><text x='427.00' y='302' text-anchor='middle' class='axis-label'>20대 후반</text><text x='533.00' y='302' text-anchor='middle' class='axis-label'>30대 초반</text><text x='639.00' y='302' text-anchor='middle' class='axis-label'>30대 중반</text><text x='745.00' y='302' text-anchor='middle' class='axis-label'>30대 후반</text><text x='851.00' y='302' text-anchor='middle' class='axis-label'>40대 이상</text>
+      </svg>
+    </section>
+    
+    <section class="card">
+      <h2>연령대별 선호 카테고리</h2>
+      <p class="subtitle">연령별 카테고리 선호도를 나타낸 표입니다.</p>
+      <table>
+        <thead><tr><th>연령대</th><th>선호 카테고리 (1위)</th><th>선호 카테고리 (2위)</th><th>선호 카테고리 (3위)</th></tr></thead>
+        <tbody><tr><td>10대</td><td>상의 (144.7)</td><td>바지 (104.7)</td><td>원피스 (51.5)</td></tr><tr><td>20대 초반</td><td>원피스 (89.2)</td><td>상의 (74.5)</td><td>바지 (69.5)</td></tr><tr><td>20대 중반</td><td>상의 (82.4)</td><td>바지 (42.1)</td><td>원피스 (37.0)</td></tr><tr><td>20대 후반</td><td>원피스 (54.8)</td><td>상의 (49.5)</td><td>바지 (27.9)</td></tr><tr><td>30대 초반</td><td>상의 (116.8)</td><td>원피스 (81.5)</td><td>슈즈 (53.7)</td></tr><tr><td>30대 중반</td><td>원피스 (63.4)</td><td>상의 (59.8)</td><td>바지 (40.5)</td></tr><tr><td>30대 후반</td><td>상의 (51.7)</td><td>원피스 (26.3)</td><td>바지 (13.1)</td></tr><tr><td>40대 이상</td><td>상의 (60.1)</td><td>원피스 (48.4)</td><td>바지 (37.4)</td></tr></tbody>
+      </table>
+    </section>
+    
+    <section class="card">
+      <h2>연령대별 시간대 주문 히트맵</h2>
+      <p class="subtitle">전체 주문량 기준으로 각 연령대에서 어떤 시간대에 주문이 몰리는지 보여줍니다.</p>
+      <table class="heatmap-table">
+        <thead><tr><th></th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th></tr></thead>
+        <tbody><tr><th>10대</th><td style='background: rgba(79, 70, 229, 0.482);'>19</td><td style='background: rgba(79, 70, 229, 0.376);'>14</td><td style='background: rgba(79, 70, 229, 0.207);'>6</td><td style='background: rgba(79, 70, 229, 0.143);'>3</td><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.165);'>4</td><td style='background: rgba(79, 70, 229, 0.165);'>4</td><td style='background: rgba(79, 70, 229, 0.186);'>5</td><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.165);'>4</td><td style='background: rgba(79, 70, 229, 0.143);'>3</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.143);'>3</td><td style='background: rgba(79, 70, 229, 0.186);'>5</td><td style='background: rgba(79, 70, 229, 0.228);'>7</td><td style='background: rgba(79, 70, 229, 0.292);'>10</td><td style='background: rgba(79, 70, 229, 0.355);'>13</td><td style='background: rgba(79, 70, 229, 0.376);'>14</td><td style='background: rgba(79, 70, 229, 0.292);'>10</td><td style='background: rgba(79, 70, 229, 0.588);'>24</td><td style='background: rgba(79, 70, 229, 0.630);'>26</td><td style='background: rgba(79, 70, 229, 0.524);'>21</td></tr><tr><th>20대 초반</th><td style='background: rgba(79, 70, 229, 0.292);'>10</td><td style='background: rgba(79, 70, 229, 0.376);'>14</td><td style='background: rgba(79, 70, 229, 0.270);'>9</td><td style='background: rgba(79, 70, 229, 0.270);'>9</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.165);'>4</td><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.207);'>6</td><td style='background: rgba(79, 70, 229, 0.249);'>8</td><td style='background: rgba(79, 70, 229, 0.207);'>6</td><td style='background: rgba(79, 70, 229, 0.207);'>6</td><td style='background: rgba(79, 70, 229, 0.313);'>11</td><td style='background: rgba(79, 70, 229, 0.334);'>12</td><td style='background: rgba(79, 70, 229, 0.228);'>7</td><td style='background: rgba(79, 70, 229, 0.186);'>5</td><td style='background: rgba(79, 70, 229, 0.207);'>6</td><td style='background: rgba(79, 70, 229, 0.228);'>7</td><td style='background: rgba(79, 70, 229, 0.143);'>3</td><td style='background: rgba(79, 70, 229, 0.228);'>7</td><td style='background: rgba(79, 70, 229, 0.270);'>9</td><td style='background: rgba(79, 70, 229, 0.249);'>8</td><td style='background: rgba(79, 70, 229, 0.207);'>6</td></tr><tr><th>20대 중반</th><td style='background: rgba(79, 70, 229, 0.292);'>10</td><td style='background: rgba(79, 70, 229, 0.228);'>7</td><td style='background: rgba(79, 70, 229, 0.165);'>4</td><td style='background: rgba(79, 70, 229, 0.143);'>3</td><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.143);'>3</td><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.143);'>3</td><td style='background: rgba(79, 70, 229, 0.292);'>10</td><td style='background: rgba(79, 70, 229, 0.207);'>6</td><td style='background: rgba(79, 70, 229, 0.249);'>8</td><td style='background: rgba(79, 70, 229, 0.292);'>10</td><td style='background: rgba(79, 70, 229, 0.207);'>6</td><td style='background: rgba(79, 70, 229, 0.143);'>3</td><td style='background: rgba(79, 70, 229, 0.228);'>7</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.207);'>6</td><td style='background: rgba(79, 70, 229, 0.186);'>5</td><td style='background: rgba(79, 70, 229, 0.249);'>8</td><td style='background: rgba(79, 70, 229, 0.228);'>7</td><td style='background: rgba(79, 70, 229, 0.165);'>4</td></tr><tr><th>20대 후반</th><td style='background: rgba(79, 70, 229, 0.376);'>14</td><td style='background: rgba(79, 70, 229, 0.207);'>6</td><td style='background: rgba(79, 70, 229, 0.186);'>5</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.165);'>4</td><td style='background: rgba(79, 70, 229, 0.186);'>5</td><td style='background: rgba(79, 70, 229, 0.249);'>8</td><td style='background: rgba(79, 70, 229, 0.143);'>3</td><td style='background: rgba(79, 70, 229, 0.186);'>5</td><td style='background: rgba(79, 70, 229, 0.292);'>10</td><td style='background: rgba(79, 70, 229, 0.249);'>8</td><td style='background: rgba(79, 70, 229, 0.186);'>5</td><td style='background: rgba(79, 70, 229, 0.270);'>9</td><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.228);'>7</td><td style='background: rgba(79, 70, 229, 0.165);'>4</td><td style='background: rgba(79, 70, 229, 0.186);'>5</td><td style='background: rgba(79, 70, 229, 0.207);'>6</td><td style='background: rgba(79, 70, 229, 0.334);'>12</td><td style='background: rgba(79, 70, 229, 0.207);'>6</td></tr><tr><th>30대 초반</th><td style='background: rgba(79, 70, 229, 0.207);'>6</td><td style='background: rgba(79, 70, 229, 0.249);'>8</td><td style='background: rgba(79, 70, 229, 0.143);'>3</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.143);'>3</td><td style='background: rgba(79, 70, 229, 0.186);'>5</td><td style='background: rgba(79, 70, 229, 0.143);'>3</td><td style='background: rgba(79, 70, 229, 0.249);'>8</td><td style='background: rgba(79, 70, 229, 0.292);'>10</td><td style='background: rgba(79, 70, 229, 0.228);'>7</td><td style='background: rgba(79, 70, 229, 0.228);'>7</td><td style='background: rgba(79, 70, 229, 0.207);'>6</td><td style='background: rgba(79, 70, 229, 0.186);'>5</td><td style='background: rgba(79, 70, 229, 0.207);'>6</td><td style='background: rgba(79, 70, 229, 0.186);'>5</td><td style='background: rgba(79, 70, 229, 0.186);'>5</td><td style='background: rgba(79, 70, 229, 0.249);'>8</td><td style='background: rgba(79, 70, 229, 0.228);'>7</td><td style='background: rgba(79, 70, 229, 0.292);'>10</td><td style='background: rgba(79, 70, 229, 0.334);'>12</td><td style='background: rgba(79, 70, 229, 0.249);'>8</td></tr><tr><th>30대 중반</th><td style='background: rgba(79, 70, 229, 0.143);'>3</td><td style='background: rgba(79, 70, 229, 0.143);'>3</td><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.143);'>3</td><td style='background: rgba(79, 70, 229, 0.143);'>3</td><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.186);'>5</td><td style='background: rgba(79, 70, 229, 0.143);'>3</td><td style='background: rgba(79, 70, 229, 0.186);'>5</td><td style='background: rgba(79, 70, 229, 0.165);'>4</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td></tr><tr><th>30대 후반</th><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.143);'>3</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td></tr><tr><th>40대 이상</th><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.122);'>2</td><td style='background: rgba(79, 70, 229, 0.101);'>1</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td></tr></tbody>
+      </table>
+    </section>
+    
+    <section class="card">
+      <h2>연령대별 행동/구매 요약</h2>
+      <p class="subtitle">활동 시간과 주문 시간, 선호 카테고리 상위 3개를 함께 확인합니다.</p>
+      <table>
+        <thead><tr><th>연령대</th><th>가입자 수</th><th>활동 유저 수</th><th>구매 유저 수</th><th>구매자 비율</th><th>주문 수</th><th>객단가</th><th>활동 피크</th><th>주문 피크</th><th>선호 카테고리 (1위)</th><th>선호 카테고리 (2위)</th><th>선호 카테고리 (3위)</th></tr></thead>
+        <tbody><tr><td>10대</td><td>1,737</td><td>1,728</td><td>193</td><td>11.11%</td><td>204</td><td>14,788원</td><td>00시</td><td>22시</td><td>상의 (144.7)</td><td>바지 (104.7)</td><td>원피스 (51.5)</td></tr><tr><td>20대 초반</td><td>1,335</td><td>1,319</td><td>152</td><td>11.39%</td><td>158</td><td>21,118원</td><td>00시</td><td>01시</td><td>원피스 (89.2)</td><td>상의 (74.5)</td><td>바지 (69.5)</td></tr><tr><td>20대 중반</td><td>1,007</td><td>995</td><td>112</td><td>11.12%</td><td>118</td><td>25,639원</td><td>23시</td><td>00시</td><td>상의 (82.4)</td><td>바지 (42.1)</td><td>원피스 (37.0)</td></tr><tr><td>20대 후반</td><td>1,007</td><td>991</td><td>122</td><td>12.12%</td><td>127</td><td>25,994원</td><td>22시</td><td>00시</td><td>원피스 (54.8)</td><td>상의 (49.5)</td><td>바지 (27.9)</td></tr><tr><td>30대 초반</td><td>1,313</td><td>1,293</td><td>129</td><td>9.82%</td><td>133</td><td>26,176원</td><td>23시</td><td>22시</td><td>상의 (116.8)</td><td>원피스 (81.5)</td><td>슈즈 (53.7)</td></tr><tr><td>30대 중반</td><td>984</td><td>975</td><td>47</td><td>4.78%</td><td>47</td><td>28,577원</td><td>22시</td><td>19시</td><td>원피스 (63.4)</td><td>상의 (59.8)</td><td>바지 (40.5)</td></tr><tr><td>30대 후반</td><td>950</td><td>948</td><td>16</td><td>1.68%</td><td>17</td><td>24,635원</td><td>23시</td><td>02시</td><td>상의 (51.7)</td><td>원피스 (26.3)</td><td>바지 (13.1)</td></tr><tr><td>40대 이상</td><td>1,324</td><td>1,323</td><td>19</td><td>1.44%</td><td>20</td><td>32,098원</td><td>22시</td><td>00시</td><td>상의 (60.1)</td><td>원피스 (48.4)</td><td>바지 (37.4)</td></tr></tbody>
+      </table>
+    </section>
+    
+    </div>
+  </div>
+</body>
+</html>

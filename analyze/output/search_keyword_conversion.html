@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>4. 검색 키워드와 구매 전환</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 32px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+    .hero, .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+    }
+    .hero {
+      margin-bottom: 20px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+    h2 {
+      margin: 0 0 6px;
+      font-size: 20px;
+    }
+    .hero p, .subtitle {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .subtitle {
+      margin-bottom: 14px;
+    }
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .kpi {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .label {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+    .value {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .grid {
+      display: grid;
+      gap: 20px;
+    }
+    svg {
+      width: 100%;
+      height: auto;
+      overflow: visible;
+    }
+    .guide {
+      stroke: #e5e7eb;
+      stroke-width: 1;
+      stroke-dasharray: 4 4;
+    }
+    .axis {
+      stroke: #9ca3af;
+      stroke-width: 1.2;
+    }
+    .axis-label {
+      fill: #6b7280;
+      font-size: 11px;
+    }
+    .bar-value {
+      fill: #374151;
+      font-size: 9px;
+    }
+    .legend {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .legend-swatch {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+    th, td {
+      border-bottom: 1px solid var(--border);
+      padding: 10px 8px;
+      text-align: right;
+      font-size: 14px;
+      vertical-align: middle;
+      word-break: keep-all;
+    }
+    th:first-child, td:first-child {
+      text-align: left;
+    }
+    .heatmap-table th, .heatmap-table td {
+      text-align: center;
+    }
+    .insight-list {
+      margin: 0;
+      padding-left: 20px;
+      line-height: 1.7;
+    }
+    @media (max-width: 900px) {
+      body { padding: 16px; }
+      .kpis { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <h1>4. 검색 키워드와 구매 전환</h1>
+      <p>검색 키워드별 수요와 실제 구매 전환을 분석한 결과입니다.</p>
+      <div class="kpis">
+            <div class="kpi">
+              <div class="label">검색 이벤트 수 1위 키워드</div>
+              <div class="value">원피스 (109건)</div>
+            </div>
+            
+            <div class="kpi">
+              <div class="label">전환율 1위 키워드</div>
+              <div class="value">롱스커트 (10.00%)</div>
+            </div>
+            
+            <div class="kpi">
+              <div class="label">평균 구매전환율</div>
+              <div class="value">3.87%</div>
+            </div>
+            </div>
+    </section>
+    <div class="grid">
+      
+    <section class="card">
+      <h2>해석 포인트</h2>
+      <ul class="insight-list"><li>특정 상품을 검색(`goods_search_result`)하고 해당 상품의 웹페이지로 진입(`enter_browser`)한 이벤트를 검색 이벤트라고 정의했습니다.</li><li>구매 전환은 검색 이벤트 발생 이후 가장 가까이 해당 상품을 주문한 1건을 기준으로 정의했습니다.</li><li>따라서 구매 전환율은 검색 이벤트 수 대비 실제 주문으로 연결된 주문 수의 비율입니다.</li><li>검색량이 많은데 구매 전환율이 낮은 키워드는 상품 구성, 가격 경쟁력, 검색 결과 노출 품질을 점검할 후보로 볼 수 있습니다.</li></ul>
+    </section>
+    
+    <section class="card">
+      <h2>검색 키워드별 검색 이벤트와 구매 전환</h2>
+      <p class="subtitle">검색 횟수가 많은 키워드에서 실제 구매 전환이 얼마나 따라오는지 비교합니다.</p>
+      <div class="legend"><span class='legend-item'><span class='legend-swatch' style='background:#4f46e5'></span>검색 이벤트</span><span class='legend-item'><span class='legend-swatch' style='background:#059669'></span>구매 전환</span></div>
+      <svg viewBox="0 0 920 340" role="img" aria-label="검색 키워드별 검색 이벤트와 구매 전환">
+        <line x1='56' y1='272.00' x2='900' y2='272.00' class='guide' /><text x='46' y='276.00' text-anchor='end' class='axis-label'>0</text><line x1='56' y1='213.00' x2='900' y2='213.00' class='guide' /><text x='46' y='217.00' text-anchor='end' class='axis-label'>27</text><line x1='56' y1='154.00' x2='900' y2='154.00' class='guide' /><text x='46' y='158.00' text-anchor='end' class='axis-label'>54</text><line x1='56' y1='95.00' x2='900' y2='95.00' class='guide' /><text x='46' y='99.00' text-anchor='end' class='axis-label'>82</text><line x1='56' y1='36.00' x2='900' y2='36.00' class='guide' /><text x='46' y='40.00' text-anchor='end' class='axis-label'>109</text>
+        <line x1="56" y1="272" x2="900" y2="272" class="axis" />
+        <rect x='62.00' y='36.00' width='27.17' height='236.00' rx='4' fill='#4f46e5' /><text x='75.58' y='30.00' text-anchor='middle' class='bar-value'>109</text><rect x='132.33' y='116.11' width='27.17' height='155.89' rx='4' fill='#4f46e5' /><text x='145.92' y='110.11' text-anchor='middle' class='bar-value'>72</text><rect x='202.67' y='146.42' width='27.17' height='125.58' rx='4' fill='#4f46e5' /><text x='216.25' y='140.42' text-anchor='middle' class='bar-value'>58</text><rect x='273.00' y='146.42' width='27.17' height='125.58' rx='4' fill='#4f46e5' /><text x='286.58' y='140.42' text-anchor='middle' class='bar-value'>58</text><rect x='343.33' y='159.41' width='27.17' height='112.59' rx='4' fill='#4f46e5' /><text x='356.92' y='153.41' text-anchor='middle' class='bar-value'>52</text><rect x='413.67' y='170.24' width='27.17' height='101.76' rx='4' fill='#4f46e5' /><text x='427.25' y='164.24' text-anchor='middle' class='bar-value'>47</text><rect x='484.00' y='170.24' width='27.17' height='101.76' rx='4' fill='#4f46e5' /><text x='497.58' y='164.24' text-anchor='middle' class='bar-value'>47</text><rect x='554.33' y='183.23' width='27.17' height='88.77' rx='4' fill='#4f46e5' /><text x='567.92' y='177.23' text-anchor='middle' class='bar-value'>41</text><rect x='624.67' y='185.39' width='27.17' height='86.61' rx='4' fill='#4f46e5' /><text x='638.25' y='179.39' text-anchor='middle' class='bar-value'>40</text><rect x='695.00' y='198.39' width='27.17' height='73.61' rx='4' fill='#4f46e5' /><text x='708.58' y='192.39' text-anchor='middle' class='bar-value'>34</text><rect x='765.33' y='204.88' width='27.17' height='67.12' rx='4' fill='#4f46e5' /><text x='778.92' y='198.88' text-anchor='middle' class='bar-value'>31</text><rect x='835.67' y='207.05' width='27.17' height='64.95' rx='4' fill='#4f46e5' /><text x='849.25' y='201.05' text-anchor='middle' class='bar-value'>30</text><rect x='91.17' y='259.01' width='27.17' height='12.99' rx='4' fill='#059669' /><text x='104.75' y='253.01' text-anchor='middle' class='bar-value'>6</text><rect x='161.50' y='269.83' width='27.17' height='2.17' rx='4' fill='#059669' /><text x='175.08' y='263.83' text-anchor='middle' class='bar-value'>1</text><rect x='231.83' y='263.34' width='27.17' height='8.66' rx='4' fill='#059669' /><text x='245.42' y='257.34' text-anchor='middle' class='bar-value'>4</text><rect x='302.17' y='267.67' width='27.17' height='4.33' rx='4' fill='#059669' /><text x='315.75' y='261.67' text-anchor='middle' class='bar-value'>2</text><rect x='372.50' y='269.83' width='27.17' height='2.17' rx='4' fill='#059669' /><text x='386.08' y='263.83' text-anchor='middle' class='bar-value'>1</text><rect x='442.83' y='272.00' width='27.17' height='0.00' rx='4' fill='#059669' /><text x='456.42' y='266.00' text-anchor='middle' class='bar-value'>0</text><rect x='513.17' y='265.50' width='27.17' height='6.50' rx='4' fill='#059669' /><text x='526.75' y='259.50' text-anchor='middle' class='bar-value'>3</text><rect x='583.50' y='263.34' width='27.17' height='8.66' rx='4' fill='#059669' /><text x='597.08' y='257.34' text-anchor='middle' class='bar-value'>4</text><rect x='653.83' y='267.67' width='27.17' height='4.33' rx='4' fill='#059669' /><text x='667.42' y='261.67' text-anchor='middle' class='bar-value'>2</text><rect x='724.17' y='272.00' width='27.17' height='0.00' rx='4' fill='#059669' /><text x='737.75' y='266.00' text-anchor='middle' class='bar-value'>0</text><rect x='794.50' y='267.67' width='27.17' height='4.33' rx='4' fill='#059669' /><text x='808.08' y='261.67' text-anchor='middle' class='bar-value'>2</text><rect x='864.83' y='272.00' width='27.17' height='0.00' rx='4' fill='#059669' /><text x='878.42' y='266.00' text-anchor='middle' class='bar-value'>0</text>
+        <text x='91.17' y='322' text-anchor='middle' class='axis-label'>원피스</text><text x='161.50' y='322' text-anchor='middle' class='axis-label'>로브</text><text x='231.83' y='322' text-anchor='middle' class='axis-label'>블라우스</text><text x='302.17' y='322' text-anchor='middle' class='axis-label'>비키니</text><text x='372.50' y='322' text-anchor='middle' class='axis-label'>오프숄더</text><text x='442.83' y='322' text-anchor='middle' class='axis-label'>린넨</text><text x='513.17' y='322' text-anchor='middle' class='axis-label'>샌들</text><text x='583.50' y='322' text-anchor='middle' class='axis-label'>래쉬가드</text><text x='653.83' y='322' text-anchor='middle' class='axis-label'>귀걸이</text><text x='724.17' y='322' text-anchor='middle' class='axis-label'>세트</text><text x='794.50' y='322' text-anchor='middle' class='axis-label'>반바지</text><text x='864.83' y='322' text-anchor='middle' class='axis-label'>가디건</text>
+      </svg>
+    </section>
+    
+    <section class="card">
+      <h2>검색 키워드별 구매 전환율</h2>
+      <p class="subtitle">검색 이벤트 수 20건 이상 키워드 중 실제 구매 전환율 상위 키워드를 비교합니다.</p>
+      <svg viewBox="0 0 920 320" role="img" aria-label="검색 키워드별 구매 전환율">
+        <line x1='56' y1='262.00' x2='904' y2='262.00' class='guide' /><text x='46' y='266.00' text-anchor='end' class='axis-label'>0%</text><line x1='56' y1='205.50' x2='904' y2='205.50' class='guide' /><text x='46' y='209.50' text-anchor='end' class='axis-label'>2%</text><line x1='56' y1='149.00' x2='904' y2='149.00' class='guide' /><text x='46' y='153.00' text-anchor='end' class='axis-label'>5%</text><line x1='56' y1='92.50' x2='904' y2='92.50' class='guide' /><text x='46' y='96.50' text-anchor='end' class='axis-label'>8%</text><line x1='56' y1='36.00' x2='904' y2='36.00' class='guide' /><text x='46' y='40.00' text-anchor='end' class='axis-label'>10%</text>
+        <line x1="56" y1="262" x2="904" y2="262" class="axis" />
+        <rect x='60.00' y='36.00' width='62.67' height='226.00' rx='4' fill='#ea580c' /><text x='91.33' y='30.00' text-anchor='middle' class='bar-value'>10.00%</text><rect x='130.67' y='41.42' width='62.67' height='220.58' rx='4' fill='#ea580c' /><text x='162.00' y='35.42' text-anchor='middle' class='bar-value'>9.76%</text><rect x='201.33' y='106.06' width='62.67' height='155.94' rx='4' fill='#ea580c' /><text x='232.67' y='100.06' text-anchor='middle' class='bar-value'>6.90%</text><rect x='272.00' y='116.23' width='62.67' height='145.77' rx='4' fill='#ea580c' /><text x='303.33' y='110.23' text-anchor='middle' class='bar-value'>6.45%</text><rect x='342.67' y='117.81' width='62.67' height='144.19' rx='4' fill='#ea580c' /><text x='374.00' y='111.81' text-anchor='middle' class='bar-value'>6.38%</text><rect x='413.33' y='137.70' width='62.67' height='124.30' rx='4' fill='#ea580c' /><text x='444.67' y='131.70' text-anchor='middle' class='bar-value'>5.50%</text><rect x='484.00' y='149.00' width='62.67' height='113.00' rx='4' fill='#ea580c' /><text x='515.33' y='143.00' text-anchor='middle' class='bar-value'>5.00%</text><rect x='554.67' y='149.00' width='62.67' height='113.00' rx='4' fill='#ea580c' /><text x='586.00' y='143.00' text-anchor='middle' class='bar-value'>5.00%</text><rect x='625.33' y='163.69' width='62.67' height='98.31' rx='4' fill='#ea580c' /><text x='656.67' y='157.69' text-anchor='middle' class='bar-value'>4.35%</text><rect x='696.00' y='181.32' width='62.67' height='80.68' rx='4' fill='#ea580c' /><text x='727.33' y='175.32' text-anchor='middle' class='bar-value'>3.57%</text><rect x='766.67' y='184.03' width='62.67' height='77.97' rx='4' fill='#ea580c' /><text x='798.00' y='178.03' text-anchor='middle' class='bar-value'>3.45%</text><rect x='837.33' y='218.61' width='62.67' height='43.39' rx='4' fill='#ea580c' /><text x='868.67' y='212.61' text-anchor='middle' class='bar-value'>1.92%</text>
+        <text x='91.33' y='302' text-anchor='middle' class='axis-label'>롱스커트</text><text x='162.00' y='302' text-anchor='middle' class='axis-label'>래쉬가드</text><text x='232.67' y='302' text-anchor='middle' class='axis-label'>블라우스</text><text x='303.33' y='302' text-anchor='middle' class='axis-label'>반바지</text><text x='374.00' y='302' text-anchor='middle' class='axis-label'>샌들</text><text x='444.67' y='302' text-anchor='middle' class='axis-label'>원피스</text><text x='515.33' y='302' text-anchor='middle' class='axis-label'>귀걸이</text><text x='586.00' y='302' text-anchor='middle' class='axis-label'>나시</text><text x='656.67' y='302' text-anchor='middle' class='axis-label'>슬리퍼</text><text x='727.33' y='302' text-anchor='middle' class='axis-label'>멜빵</text><text x='798.00' y='302' text-anchor='middle' class='axis-label'>비키니</text><text x='868.67' y='302' text-anchor='middle' class='axis-label'>오프숄더</text>
+      </svg>
+    </section>
+    
+    <section class="card">
+      <h2>검색량 대비 저전환 키워드</h2>
+      <p class="subtitle">검색 이벤트가 많지만 평균 대비 전환율이 낮은 키워드입니다. 개선 우선순위 후보로 볼 수 있습니다.</p>
+      <table>
+        <thead><tr><th>키워드</th><th>대표 카테고리</th><th>카테고리 평균 가격</th><th>검색 이벤트</th><th>구매 전환</th><th>구매 전환율</th><th>구매 전환 매출</th></tr></thead>
+        <tbody><tr><td>로브</td><td>아우터</td><td>45,178</td><td>72</td><td>1</td><td>1.39%</td><td>9,800</td></tr><tr><td>비키니</td><td>비치웨어</td><td>32,099</td><td>58</td><td>2</td><td>3.45%</td><td>57,100</td></tr><tr><td>오프숄더</td><td>상의</td><td>25,086</td><td>52</td><td>1</td><td>1.92%</td><td>18,500</td></tr><tr><td>린넨</td><td>원피스</td><td>40,104</td><td>47</td><td>0</td><td>0.00%</td><td>0</td></tr><tr><td>세트</td><td>상의</td><td>25,086</td><td>34</td><td>0</td><td>0.00%</td><td>0</td></tr><tr><td>가디건</td><td>아우터</td><td>45,178</td><td>30</td><td>0</td><td>0.00%</td><td>0</td></tr><tr><td>투피스</td><td>원피스</td><td>40,104</td><td>30</td><td>0</td><td>0.00%</td><td>0</td></tr><tr><td>멜빵</td><td>패션소품</td><td>21,825</td><td>28</td><td>1</td><td>3.57%</td><td>16,500</td></tr></tbody>
+      </table>
+    </section>
+    
+    <section class="card">
+      <h2>검색 키워드 요약 표</h2>
+      <p class="subtitle">검색량 상위 키워드 기준으로 실제 구매 전환과 후속 매출을 함께 확인합니다.</p>
+      <table>
+        <thead><tr><th>키워드</th><th>대표 카테고리</th><th>카테고리 평균 가격</th><th>검색 이벤트</th><th>구매 전환</th><th>구매 전환율</th><th>구매 전환 매출</th></tr></thead>
+        <tbody><tr><td>원피스</td><td>원피스</td><td>40,104</td><td>109</td><td>6</td><td>5.50%</td><td>126,400</td></tr><tr><td>로브</td><td>아우터</td><td>45,178</td><td>72</td><td>1</td><td>1.39%</td><td>9,800</td></tr><tr><td>블라우스</td><td>상의</td><td>25,086</td><td>58</td><td>4</td><td>6.90%</td><td>79,000</td></tr><tr><td>비키니</td><td>비치웨어</td><td>32,099</td><td>58</td><td>2</td><td>3.45%</td><td>57,100</td></tr><tr><td>오프숄더</td><td>상의</td><td>25,086</td><td>52</td><td>1</td><td>1.92%</td><td>18,500</td></tr><tr><td>린넨</td><td>원피스</td><td>40,104</td><td>47</td><td>0</td><td>0.00%</td><td>0</td></tr><tr><td>샌들</td><td>슈즈</td><td>32,456</td><td>47</td><td>3</td><td>6.38%</td><td>77,200</td></tr><tr><td>래쉬가드</td><td>비치웨어</td><td>32,099</td><td>41</td><td>4</td><td>9.76%</td><td>133,500</td></tr><tr><td>귀걸이</td><td>악세사리</td><td>22,472</td><td>40</td><td>2</td><td>5.00%</td><td>35,500</td></tr><tr><td>세트</td><td>상의</td><td>25,086</td><td>34</td><td>0</td><td>0.00%</td><td>0</td></tr><tr><td>반바지</td><td>바지</td><td>27,479</td><td>31</td><td>2</td><td>6.45%</td><td>22,100</td></tr><tr><td>가디건</td><td>아우터</td><td>45,178</td><td>30</td><td>0</td><td>0.00%</td><td>0</td></tr></tbody>
+      </table>
+    </section>
+    
+    </div>
+  </div>
+</body>
+</html>

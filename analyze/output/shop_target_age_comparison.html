@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>5. 쇼핑몰 타깃 연령과 실제 구매 연령 비교</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 32px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+    .hero, .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+    }
+    .hero {
+      margin-bottom: 20px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+    h2 {
+      margin: 0 0 6px;
+      font-size: 20px;
+    }
+    .hero p, .subtitle {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .subtitle {
+      margin-bottom: 14px;
+    }
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .kpi {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .label {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+    .value {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .grid {
+      display: grid;
+      gap: 20px;
+    }
+    svg {
+      width: 100%;
+      height: auto;
+      overflow: visible;
+    }
+    .guide {
+      stroke: #e5e7eb;
+      stroke-width: 1;
+      stroke-dasharray: 4 4;
+    }
+    .axis {
+      stroke: #9ca3af;
+      stroke-width: 1.2;
+    }
+    .axis-label {
+      fill: #6b7280;
+      font-size: 11px;
+    }
+    .bar-value {
+      fill: #374151;
+      font-size: 9px;
+    }
+    .legend {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .legend-swatch {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+    th, td {
+      border-bottom: 1px solid var(--border);
+      padding: 10px 8px;
+      text-align: right;
+      font-size: 14px;
+      vertical-align: middle;
+      word-break: keep-all;
+    }
+    th:first-child, td:first-child {
+      text-align: left;
+    }
+    .heatmap-table th, .heatmap-table td {
+      text-align: center;
+    }
+    .insight-list {
+      margin: 0;
+      padding-left: 20px;
+      line-height: 1.7;
+    }
+    @media (max-width: 900px) {
+      body { padding: 16px; }
+      .kpis { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <h1>5. 쇼핑몰 타깃 연령과 실제 구매 연령 비교</h1>
+      <p>쇼핑몰이 설정한 타깃 연령과 실제 구매 연령대를 비교해, 입점 쇼핑몰의 노출 전략과 타깃 조정 방향을 검토하기 위한 분석입니다.</p>
+      <div class="kpis">
+            <div class="kpi">
+              <div class="label">주문 수 1위 쇼핑몰</div>
+              <div class="value">Norma (97건)</div>
+            </div>
+            
+            <div class="kpi">
+              <div class="label">타깃 일치율이 가장 낮은 쇼핑몰</div>
+              <div class="value">Elayne (45.45%)</div>
+            </div>
+            
+            <div class="kpi">
+              <div class="label">평균 주문금액 1위 쇼핑몰의 주 구매 연령</div>
+              <div class="value">Christine (20대 후반 (42%))</div>
+            </div>
+            </div>
+    </section>
+    <div class="grid">
+      
+    <section class="card">
+      <h2>해석 포인트</h2>
+      <ul class="insight-list"><li>타깃 일치율은 연령 정보가 확인된 주문만 기준으로, 실제 구매 연령대가 쇼핑몰이 설정한 타깃 연령대에 포함되는 비율입니다.</li><li>10대와 40대 이상은 각각 하나의 구간으로 묶어 비교하고, 20~30대는 초반·중반·후반으로 세분화해 비교했습니다.</li><li>실제 구매한 유저의 연령 정보가 없는 경우에는 이번 집계에서 제외했습니다.</li></ul>
+    </section>
+    
+    <section class="card">
+      <h2>쇼핑몰별 타깃 연령 비교 표 - 일치율 낮은 순</h2>
+      <p class="subtitle">주문 수가 10회 이상인 쇼핑몰 중에서 타깃 연령과 실제 주 구매 연령이 모두 명확한 쇼핑몰을 대상으로 하며, 타깃 일치율이 낮은 순으로 전체를 보여줍니다.</p>
+      <table>
+        <thead><tr><th>쇼핑몰</th><th>설정 타깃 연령</th><th>주 구매 연령(1위)</th><th>주 구매 연령(2위)</th><th>주 구매 연령(3위)</th><th>총 구매 수</th><th>평균 주문 금액</th><th>타깃 일치율</th></tr></thead>
+        <tbody><tr><td>Elayne</td><td>20대 중반/20대 후반/30대 초반</td><td>30대 중반 (45%)</td><td>30대 초반 (36%)</td><td>10대/20대 후반 (18%)</td><td>11</td><td>33,773</td><td>45.45%</td></tr><tr><td>Marlene</td><td>20대 초반/20대 중반/20대 후반</td><td>30대 초반 (35%)</td><td>20대 후반 (23%)</td><td>20대 초반 (19%)</td><td>26</td><td>29,385</td><td>50.00%</td></tr><tr><td>Delmy</td><td>20대 초반/20대 중반/20대 후반</td><td>30대 초반 (28%)</td><td>20대 초반 (25%)</td><td>20대 중반 (17%)</td><td>36</td><td>19,169</td><td>52.78%</td></tr><tr><td>Tonya</td><td>10대/20대 초반/20대 중반</td><td>10대/30대 초반 (62%)</td><td>20대 초반 (23%)</td><td>20대 후반 (15%)</td><td>13</td><td>15,346</td><td>53.85%</td></tr><tr><td>Kimberly</td><td>10대/20대 초반/20대 중반</td><td>10대/20대 중반/20대 후반 (90%)</td><td>30대 초반 (10%)</td><td>-</td><td>10</td><td>20,870</td><td>60.00%</td></tr><tr><td>Treva</td><td>20대 초반/20대 중반/20대 후반</td><td>20대 초반 (33%)</td><td>10대 (28%)</td><td>20대 중반 (17%)</td><td>18</td><td>19,301</td><td>61.11%</td></tr><tr><td>Leticia</td><td>10대/20대 초반/20대 중반</td><td>20대 중반 (29%)</td><td>20대 초반 (24%)</td><td>20대 후반 (19%)</td><td>21</td><td>23,424</td><td>66.67%</td></tr><tr><td>Christine</td><td>20대 초반/20대 중반/20대 후반</td><td>20대 후반 (42%)</td><td>20대 중반/30대 초반 (42%)</td><td>30대 중반 (11%)</td><td>19</td><td>34,368</td><td>68.42%</td></tr><tr><td>Cynthia</td><td>20대 초반/20대 중반/20대 후반</td><td>20대 후반 (44%)</td><td>20대 초반/20대 중반 (33%)</td><td>30대 초반 (11%)</td><td>18</td><td>26,161</td><td>77.78%</td></tr><tr><td>Ashley</td><td>20대 중반/20대 후반/30대 초반</td><td>30대 초반 (42%)</td><td>20대 후반 (29%)</td><td>20대 초반/20대 중반/30대 중반 (25%)</td><td>24</td><td>27,329</td><td>79.17%</td></tr><tr><td>Eun</td><td>10대/20대 초반/20대 중반</td><td>10대 (36%)</td><td>20대 초반 (27%)</td><td>20대 중반 (18%)</td><td>11</td><td>27,436</td><td>81.82%</td></tr><tr><td>Rachel</td><td>10대/20대 초반</td><td>10대 (76%)</td><td>20대 초반 (10%)</td><td>20대 후반 (7%)</td><td>42</td><td>10,640</td><td>85.71%</td></tr><tr><td>Christina</td><td>20대 초반/20대 중반/20대 후반</td><td>20대 초반/20대 후반 (73%)</td><td>20대 중반 (18%)</td><td>30대 초반 (9%)</td><td>11</td><td>28,182</td><td>90.91%</td></tr><tr><td>Jasmine</td><td>10대/20대 초반/20대 중반</td><td>10대 (55%)</td><td>20대 초반/20대 중반 (36%)</td><td>20대 후반 (9%)</td><td>11</td><td>9,991</td><td>90.91%</td></tr><tr><td>Michelle</td><td>10대/20대 초반/20대 중반</td><td>10대 (73%)</td><td>20대 초반/20대 중반/20대 후반 (27%)</td><td>-</td><td>11</td><td>18,029</td><td>90.91%</td></tr><tr><td>Mirna</td><td>10대/20대 초반</td><td>10대 (77%)</td><td>20대 초반 (15%)</td><td>30대 초반 (8%)</td><td>13</td><td>13,362</td><td>92.31%</td></tr><tr><td>Norma</td><td>10대/20대 초반/20대 중반</td><td>10대 (49%)</td><td>20대 초반 (35%)</td><td>20대 중반 (8%)</td><td>97</td><td>13,825</td><td>92.78%</td></tr><tr><td>Pam</td><td>20대 중반/20대 후반/30대 초반</td><td>20대 후반 (47%)</td><td>30대 초반 (27%)</td><td>20대 중반 (20%)</td><td>15</td><td>21,620</td><td>93.33%</td></tr><tr><td>Paula</td><td>10대/20대 초반/20대 중반</td><td>10대/20대 초반 (71%)</td><td>20대 중반 (29%)</td><td>-</td><td>14</td><td>25,607</td><td>100.00%</td></tr><tr><td>Mildred</td><td>10대/20대 초반/20대 중반</td><td>10대 (60%)</td><td>20대 초반/20대 중반 (40%)</td><td>-</td><td>10</td><td>10,950</td><td>100.00%</td></tr></tbody>
+      </table>
+    </section>
+    
+    <section class="card">
+      <h2>연령대 설정 타깃이 미정인 쇼핑몰</h2>
+      <p class="subtitle">설정 타깃 연령이 미정이며 주문 수가 10회 이상인 쇼핑몰을 주문 수 내림차순으로 전체 표시합니다.</p>
+      <table>
+        <thead><tr><th>쇼핑몰</th><th>주 구매 연령(1위)</th><th>주 구매 연령(2위)</th><th>주 구매 연령(3위)</th><th>총 구매 수</th><th>평균 주문 금액</th></tr></thead>
+        <tbody><tr><td>Edie</td><td>30대 초반 (23%)</td><td>20대 초반/20대 중반 (41%)</td><td>20대 후반 (18%)</td><td>39</td><td>17,164</td></tr><tr><td>Angela</td><td>10대 (24%)</td><td>20대 초반/20대 중반 (40%)</td><td>20대 후반/30대 초반 (32%)</td><td>25</td><td>26,284</td></tr><tr><td>Sonia</td><td>10대 (76%)</td><td>20대 초반 (12%)</td><td>20대 후반/40대 이상 (12%)</td><td>17</td><td>3,450</td></tr><tr><td>Patsy</td><td>10대 (31%)</td><td>20대 초반 (19%)</td><td>20대 중반/30대 초반/30대 중반 (38%)</td><td>16</td><td>12,750</td></tr><tr><td>Jamie</td><td>20대 중반 (27%)</td><td>20대 후반/30대 초반 (40%)</td><td>10대/20대 초반 (27%)</td><td>15</td><td>25,713</td></tr></tbody>
+      </table>
+    </section>
+    
+    </div>
+  </div>
+</body>
+</html>

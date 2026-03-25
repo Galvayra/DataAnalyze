@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2. 카테고리별 주문 추이</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 32px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+    .hero, .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+    }
+    .hero {
+      margin-bottom: 20px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+    h2 {
+      margin: 0 0 6px;
+      font-size: 20px;
+    }
+    .hero p, .subtitle {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .subtitle {
+      margin-bottom: 14px;
+    }
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .kpi {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .label {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+    .value {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .grid {
+      display: grid;
+      gap: 20px;
+    }
+    svg {
+      width: 100%;
+      height: auto;
+      overflow: visible;
+    }
+    .guide {
+      stroke: #e5e7eb;
+      stroke-width: 1;
+      stroke-dasharray: 4 4;
+    }
+    .axis {
+      stroke: #9ca3af;
+      stroke-width: 1.2;
+    }
+    .axis-label {
+      fill: #6b7280;
+      font-size: 11px;
+    }
+    .bar-value {
+      fill: #374151;
+      font-size: 9px;
+    }
+    .legend {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .legend-swatch {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+    th, td {
+      border-bottom: 1px solid var(--border);
+      padding: 10px 8px;
+      text-align: right;
+      font-size: 14px;
+      vertical-align: middle;
+      word-break: keep-all;
+    }
+    th:first-child, td:first-child {
+      text-align: left;
+    }
+    .heatmap-table th, .heatmap-table td {
+      text-align: center;
+    }
+    .insight-list {
+      margin: 0;
+      padding-left: 20px;
+      line-height: 1.7;
+    }
+    @media (max-width: 900px) {
+      body { padding: 16px; }
+      .kpis { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <h1>2. 카테고리별 주문 추이</h1>
+      <p>카테고리별 관심도를 정의하여 주문 추이를 분석한 결과입니다.</p>
+      <div class="kpis">
+            <div class="kpi">
+              <div class="label">관심도 1위 카테고리</div>
+              <div class="value">상의 (659.2점)</div>
+            </div>
+            
+            <div class="kpi">
+              <div class="label">매출 1위 카테고리</div>
+              <div class="value">상의 (4,348,880원)</div>
+            </div>
+            
+            <div class="kpi">
+              <div class="label">최고 전환 카테고리</div>
+              <div class="value">란제리&amp;파자마 (9.80%)</div>
+            </div>
+            </div>
+    </section>
+    <div class="grid">
+      
+    <section class="card">
+      <h2>해석 포인트</h2>
+      <ul class="insight-list"><li>관심도 상위 5개와 매출 상위 5개의 겹침은 4개 카테고리입니다.</li><li>카테고리 관심도는 `enter_browser=0.1`, `add_my_goods=1`, `remove_my_goods=-1` 가중치를 적용한 점수입니다.</li><li>구매전환은 주문 1건당 가장 가까운 직전 상품 조회형 `enter_browser` 1건만 연결한 기준입니다.</li><li>구매전환율은 카테고리별 상품 조회형 `enter_browser` 수 대비 구매전환 주문 수 비율입니다.</li><li>가격대 매트릭스를 보면 카테고리별로 주문이 몰리는 대표 가격 구간을 확인할 수 있습니다.</li></ul>
+    </section>
+    
+    <section class="card">
+      <h2>카테고리별 관심도와 주문 수</h2>
+      <p class="subtitle">카테고리 관심도 점수 상위 카테고리 기준으로 관심도 점수와 주문 수를 함께 비교합니다.</p>
+      <div class="legend"><span class='legend-item'><span class='legend-swatch' style='background:#4f46e5'></span>관심도 점수</span><span class='legend-item'><span class='legend-swatch' style='background:#059669'></span>주문 수</span></div>
+      <svg viewBox="0 0 920 340" role="img" aria-label="카테고리별 관심도와 주문 수">
+        <line x1='56' y1='272.00' x2='900' y2='272.00' class='guide' /><text x='46' y='276.00' text-anchor='end' class='axis-label'>0</text><line x1='56' y1='213.00' x2='900' y2='213.00' class='guide' /><text x='46' y='217.00' text-anchor='end' class='axis-label'>165</text><line x1='56' y1='154.00' x2='900' y2='154.00' class='guide' /><text x='46' y='158.00' text-anchor='end' class='axis-label'>330</text><line x1='56' y1='95.00' x2='900' y2='95.00' class='guide' /><text x='46' y='99.00' text-anchor='end' class='axis-label'>494</text><line x1='56' y1='36.00' x2='900' y2='36.00' class='guide' /><text x='46' y='40.00' text-anchor='end' class='axis-label'>659</text>
+        <line x1="56" y1="272" x2="900" y2="272" class="axis" />
+        <rect x='62.00' y='36.00' width='44.75' height='236.00' rx='4' fill='#4f46e5' /><text x='84.38' y='30.00' text-anchor='middle' class='bar-value'>659</text><rect x='167.50' y='103.31' width='44.75' height='168.69' rx='4' fill='#4f46e5' /><text x='189.88' y='97.31' text-anchor='middle' class='bar-value'>471</text><rect x='273.00' y='127.47' width='44.75' height='144.53' rx='4' fill='#4f46e5' /><text x='295.38' y='121.47' text-anchor='middle' class='bar-value'>404</text><rect x='378.50' y='186.22' width='44.75' height='85.78' rx='4' fill='#4f46e5' /><text x='400.88' y='180.22' text-anchor='middle' class='bar-value'>240</text><rect x='484.00' y='217.51' width='44.75' height='54.49' rx='4' fill='#4f46e5' /><text x='506.38' y='211.51' text-anchor='middle' class='bar-value'>152</text><rect x='589.50' y='230.44' width='44.75' height='41.56' rx='4' fill='#4f46e5' /><text x='611.88' y='224.44' text-anchor='middle' class='bar-value'>116</text><rect x='695.00' y='232.05' width='44.75' height='39.95' rx='4' fill='#4f46e5' /><text x='717.38' y='226.05' text-anchor='middle' class='bar-value'>112</text><rect x='800.50' y='248.55' width='44.75' height='23.45' rx='4' fill='#4f46e5' /><text x='822.88' y='242.55' text-anchor='middle' class='bar-value'>66</text><rect x='108.75' y='197.53' width='44.75' height='74.47' rx='4' fill='#059669' /><text x='131.12' y='191.53' text-anchor='middle' class='bar-value'>208</text><rect x='214.25' y='226.17' width='44.75' height='45.83' rx='4' fill='#059669' /><text x='236.62' y='220.17' text-anchor='middle' class='bar-value'>128</text><rect x='319.75' y='212.21' width='44.75' height='59.79' rx='4' fill='#059669' /><text x='342.12' y='206.21' text-anchor='middle' class='bar-value'>167</text><rect x='425.25' y='236.92' width='44.75' height='35.08' rx='4' fill='#059669' /><text x='447.62' y='230.92' text-anchor='middle' class='bar-value'>98</text><rect x='530.75' y='251.24' width='44.75' height='20.76' rx='4' fill='#059669' /><text x='553.12' y='245.24' text-anchor='middle' class='bar-value'>58</text><rect x='636.25' y='256.96' width='44.75' height='15.04' rx='4' fill='#059669' /><text x='658.62' y='250.96' text-anchor='middle' class='bar-value'>42</text><rect x='741.75' y='253.38' width='44.75' height='18.62' rx='4' fill='#059669' /><text x='764.12' y='247.38' text-anchor='middle' class='bar-value'>52</text><rect x='847.25' y='266.27' width='44.75' height='5.73' rx='4' fill='#059669' /><text x='869.62' y='260.27' text-anchor='middle' class='bar-value'>16</text>
+        <text x='108.75' y='322' text-anchor='middle' class='axis-label'>상의</text><text x='214.25' y='322' text-anchor='middle' class='axis-label'>원피스</text><text x='319.75' y='322' text-anchor='middle' class='axis-label'>바지</text><text x='425.25' y='322' text-anchor='middle' class='axis-label'>슈즈</text><text x='530.75' y='322' text-anchor='middle' class='axis-label'>스커트</text><text x='636.25' y='322' text-anchor='middle' class='axis-label'>비치웨어</text><text x='741.75' y='322' text-anchor='middle' class='axis-label'>악세사리</text><text x='847.25' y='322' text-anchor='middle' class='axis-label'>가방</text>
+      </svg>
+    </section>
+    
+    <section class="card">
+      <h2>카테고리별 매출</h2>
+      <p class="subtitle">실제 매출 기여도가 큰 카테고리를 비교합니다.</p>
+      <svg viewBox="0 0 920 320" role="img" aria-label="카테고리별 매출">
+        <line x1='56' y1='262.00' x2='904' y2='262.00' class='guide' /><text x='46' y='266.00' text-anchor='end' class='axis-label'>0</text><line x1='56' y1='205.50' x2='904' y2='205.50' class='guide' /><text x='46' y='209.50' text-anchor='end' class='axis-label'>1,087,220</text><line x1='56' y1='149.00' x2='904' y2='149.00' class='guide' /><text x='46' y='153.00' text-anchor='end' class='axis-label'>2,174,440</text><line x1='56' y1='92.50' x2='904' y2='92.50' class='guide' /><text x='46' y='96.50' text-anchor='end' class='axis-label'>3,261,660</text><line x1='56' y1='36.00' x2='904' y2='36.00' class='guide' /><text x='46' y='40.00' text-anchor='end' class='axis-label'>4,348,880</text>
+        <line x1="56" y1="262" x2="904" y2="262" class="axis" />
+        <rect x='60.00' y='36.00' width='98.00' height='226.00' rx='4' fill='#0f766e' /><text x='109.00' y='30.00' text-anchor='middle' class='bar-value'>4,348,880</text><rect x='166.00' y='63.83' width='98.00' height='198.17' rx='4' fill='#0f766e' /><text x='215.00' y='57.83' text-anchor='middle' class='bar-value'>3,813,410</text><rect x='272.00' y='68.86' width='98.00' height='193.14' rx='4' fill='#0f766e' /><text x='321.00' y='62.86' text-anchor='middle' class='bar-value'>3,716,630</text><rect x='378.00' y='120.15' width='98.00' height='141.85' rx='4' fill='#0f766e' /><text x='427.00' y='114.15' text-anchor='middle' class='bar-value'>2,729,600</text><rect x='484.00' y='200.78' width='98.00' height='61.22' rx='4' fill='#0f766e' /><text x='533.00' y='194.78' text-anchor='middle' class='bar-value'>1,178,000</text><rect x='590.00' y='200.81' width='98.00' height='61.19' rx='4' fill='#0f766e' /><text x='639.00' y='194.81' text-anchor='middle' class='bar-value'>1,177,440</text><rect x='696.00' y='218.59' width='98.00' height='43.41' rx='4' fill='#0f766e' /><text x='745.00' y='212.59' text-anchor='middle' class='bar-value'>835,300</text><rect x='802.00' y='225.05' width='98.00' height='36.95' rx='4' fill='#0f766e' /><text x='851.00' y='219.05' text-anchor='middle' class='bar-value'>711,000</text>
+        <text x='109.00' y='302' text-anchor='middle' class='axis-label'>상의</text><text x='215.00' y='302' text-anchor='middle' class='axis-label'>원피스</text><text x='321.00' y='302' text-anchor='middle' class='axis-label'>바지</text><text x='427.00' y='302' text-anchor='middle' class='axis-label'>슈즈</text><text x='533.00' y='302' text-anchor='middle' class='axis-label'>비치웨어</text><text x='639.00' y='302' text-anchor='middle' class='axis-label'>스커트</text><text x='745.00' y='302' text-anchor='middle' class='axis-label'>란제리&amp;파자마</text><text x='851.00' y='302' text-anchor='middle' class='axis-label'>아우터</text>
+      </svg>
+    </section>
+    
+    <section class="card">
+      <h2>카테고리별 구매전환율</h2>
+      <p class="subtitle">카테고리별 상품 조회형 enter_browser 수 대비 구매전환 주문 수 비율입니다.</p>
+      <svg viewBox="0 0 920 320" role="img" aria-label="카테고리별 구매전환율">
+        <line x1='56' y1='262.00' x2='904' y2='262.00' class='guide' /><text x='46' y='266.00' text-anchor='end' class='axis-label'>0%</text><line x1='56' y1='205.50' x2='904' y2='205.50' class='guide' /><text x='46' y='209.50' text-anchor='end' class='axis-label'>2%</text><line x1='56' y1='149.00' x2='904' y2='149.00' class='guide' /><text x='46' y='153.00' text-anchor='end' class='axis-label'>5%</text><line x1='56' y1='92.50' x2='904' y2='92.50' class='guide' /><text x='46' y='96.50' text-anchor='end' class='axis-label'>7%</text><line x1='56' y1='36.00' x2='904' y2='36.00' class='guide' /><text x='46' y='40.00' text-anchor='end' class='axis-label'>10%</text>
+        <line x1="56" y1="262" x2="904" y2="262" class="axis" />
+        <rect x='60.00' y='167.68' width='98.00' height='94.32' rx='4' fill='#ea580c' /><text x='109.00' y='161.68' text-anchor='middle' class='bar-value'>4.09%</text><rect x='166.00' y='182.67' width='98.00' height='79.33' rx='4' fill='#ea580c' /><text x='215.00' y='176.67' text-anchor='middle' class='bar-value'>3.44%</text><rect x='272.00' y='124.32' width='98.00' height='137.68' rx='4' fill='#ea580c' /><text x='321.00' y='118.32' text-anchor='middle' class='bar-value'>5.97%</text><rect x='378.00' y='120.40' width='98.00' height='141.60' rx='4' fill='#ea580c' /><text x='427.00' y='114.40' text-anchor='middle' class='bar-value'>6.14%</text><rect x='484.00' y='127.78' width='98.00' height='134.22' rx='4' fill='#ea580c' /><text x='533.00' y='121.78' text-anchor='middle' class='bar-value'>5.82%</text><rect x='590.00' y='158.92' width='98.00' height='103.08' rx='4' fill='#ea580c' /><text x='639.00' y='152.92' text-anchor='middle' class='bar-value'>4.47%</text><rect x='696.00' y='36.00' width='98.00' height='226.00' rx='4' fill='#ea580c' /><text x='745.00' y='30.00' text-anchor='middle' class='bar-value'>9.80%</text><rect x='802.00' y='206.42' width='98.00' height='55.58' rx='4' fill='#ea580c' /><text x='851.00' y='200.42' text-anchor='middle' class='bar-value'>2.41%</text>
+        <text x='109.00' y='302' text-anchor='middle' class='axis-label'>상의</text><text x='215.00' y='302' text-anchor='middle' class='axis-label'>원피스</text><text x='321.00' y='302' text-anchor='middle' class='axis-label'>바지</text><text x='427.00' y='302' text-anchor='middle' class='axis-label'>슈즈</text><text x='533.00' y='302' text-anchor='middle' class='axis-label'>비치웨어</text><text x='639.00' y='302' text-anchor='middle' class='axis-label'>스커트</text><text x='745.00' y='302' text-anchor='middle' class='axis-label'>란제리&amp;파자마</text><text x='851.00' y='302' text-anchor='middle' class='axis-label'>아우터</text>
+      </svg>
+    </section>
+    
+    <section class="card">
+      <h2>카테고리별 가격대 주문 분포</h2>
+      <p class="subtitle">매출 상위 카테고리에서 어느 가격대 주문이 많은지 확인합니다.</p>
+      <table class="heatmap-table">
+        <thead><tr><th></th><th>1만원 미만</th><th>1만원대</th><th>2만원대</th><th>3~4만원대</th><th>5만원 이상</th></tr></thead>
+        <tbody><tr><th>상의</th><td style='background: rgba(79, 70, 229, 0.256);'>31</td><td style='background: rgba(79, 70, 229, 0.630);'>97</td><td style='background: rgba(79, 70, 229, 0.324);'>43</td><td style='background: rgba(79, 70, 229, 0.250);'>30</td><td style='background: rgba(79, 70, 229, 0.120);'>7</td></tr><tr><th>원피스</th><td style='background: rgba(79, 70, 229, 0.086);'>1</td><td style='background: rgba(79, 70, 229, 0.295);'>38</td><td style='background: rgba(79, 70, 229, 0.273);'>34</td><td style='background: rgba(79, 70, 229, 0.352);'>48</td><td style='background: rgba(79, 70, 229, 0.120);'>7</td></tr><tr><th>바지</th><td style='background: rgba(79, 70, 229, 0.171);'>16</td><td style='background: rgba(79, 70, 229, 0.449);'>65</td><td style='background: rgba(79, 70, 229, 0.375);'>52</td><td style='background: rgba(79, 70, 229, 0.250);'>30</td><td style='background: rgba(79, 70, 229, 0.103);'>4</td></tr><tr><th>슈즈</th><td style='background: rgba(79, 70, 229, 0.091);'>2</td><td style='background: rgba(79, 70, 229, 0.205);'>22</td><td style='background: rgba(79, 70, 229, 0.284);'>36</td><td style='background: rgba(79, 70, 229, 0.290);'>37</td><td style='background: rgba(79, 70, 229, 0.086);'>1</td></tr><tr><th>비치웨어</th><td style='background: rgba(79, 70, 229, 0.103);'>4</td><td style='background: rgba(79, 70, 229, 0.114);'>6</td><td style='background: rgba(79, 70, 229, 0.159);'>14</td><td style='background: rgba(79, 70, 229, 0.176);'>17</td><td style='background: rgba(79, 70, 229, 0.086);'>1</td></tr><tr><th>스커트</th><td style='background: rgba(79, 70, 229, 0.103);'>4</td><td style='background: rgba(79, 70, 229, 0.239);'>28</td><td style='background: rgba(79, 70, 229, 0.188);'>19</td><td style='background: rgba(79, 70, 229, 0.120);'>7</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td></tr><tr><th>란제리&amp;파자마</th><td style='background: rgba(79, 70, 229, 0.137);'>10</td><td style='background: rgba(79, 70, 229, 0.193);'>20</td><td style='background: rgba(79, 70, 229, 0.176);'>17</td><td style='background: rgba(79, 70, 229, 0.086);'>1</td><td style='background: rgba(79, 70, 229, 0.080);'>0</td></tr><tr><th>아우터</th><td style='background: rgba(79, 70, 229, 0.091);'>2</td><td style='background: rgba(79, 70, 229, 0.154);'>13</td><td style='background: rgba(79, 70, 229, 0.103);'>4</td><td style='background: rgba(79, 70, 229, 0.086);'>1</td><td style='background: rgba(79, 70, 229, 0.108);'>5</td></tr></tbody>
+      </table>
+    </section>
+    
+    <section class="card">
+      <h2>카테고리 요약 표</h2>
+      <p class="subtitle">관심도 점수, 상품 조회 수, 구매전환 주문 수, 주문, 매출, 평균 주문 금액을 함께 봅니다.</p>
+      <table>
+        <thead><tr><th>카테고리</th><th>관심도 점수</th><th>상품 조회 수</th><th>구매전환 수</th><th>주문 수</th><th>구매전환율</th><th>매출</th><th>객단가</th></tr></thead>
+        <tbody><tr><td>상의</td><td>659.2</td><td>4,232</td><td>173</td><td>208</td><td>4.09%</td><td>4,348,880</td><td>20,908</td></tr><tr><td>원피스</td><td>471.2</td><td>2,932</td><td>101</td><td>128</td><td>3.44%</td><td>3,813,410</td><td>29,792</td></tr><tr><td>바지</td><td>403.7</td><td>2,277</td><td>136</td><td>167</td><td>5.97%</td><td>3,716,630</td><td>22,255</td></tr><tr><td>슈즈</td><td>239.6</td><td>1,336</td><td>82</td><td>98</td><td>6.14%</td><td>2,729,600</td><td>27,853</td></tr><tr><td>스커트</td><td>152.2</td><td>1,052</td><td>47</td><td>58</td><td>4.47%</td><td>1,177,440</td><td>20,301</td></tr><tr><td>비치웨어</td><td>116.1</td><td>601</td><td>35</td><td>42</td><td>5.82%</td><td>1,178,000</td><td>28,048</td></tr><tr><td>악세사리</td><td>111.6</td><td>576</td><td>47</td><td>52</td><td>8.16%</td><td>484,450</td><td>9,316</td></tr><tr><td>가방</td><td>65.5</td><td>315</td><td>15</td><td>16</td><td>4.76%</td><td>330,100</td><td>20,631</td></tr><tr><td>패션소품</td><td>62.9</td><td>349</td><td>15</td><td>18</td><td>4.30%</td><td>260,210</td><td>14,456</td></tr><tr><td>아우터</td><td>59.3</td><td>623</td><td>15</td><td>25</td><td>2.41%</td><td>711,000</td><td>28,440</td></tr><tr><td>란제리&amp;파자마</td><td>57.7</td><td>347</td><td>34</td><td>48</td><td>9.80%</td><td>835,300</td><td>17,402</td></tr><tr><td>피트니스</td><td>14.2</td><td>122</td><td>5</td><td>7</td><td>4.10%</td><td>174,300</td><td>24,900</td></tr></tbody>
+      </table>
+    </section>
+    
+    </div>
+  </div>
+</body>
+</html>

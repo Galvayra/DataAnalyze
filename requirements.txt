@@ -1,0 +1,7 @@
+tqdm
+pandas
+langchain==0.3.27
+langchain-openai==0.3.35
+transformers==4.52.2
+sentence-transformers==4.1.0
+faiss-cpu==1.13.0
